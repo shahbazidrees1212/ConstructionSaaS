@@ -1,22 +1,28 @@
 ﻿using ConstructionSaaS.Domain.Entities;
+using ConstructionSaaS.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ConstructionSaaS.Infrastructure.Persistence
-{
-    public class ApplicationDbContext : DbContext
-    {
-        public ApplicationDbContext(
-            DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+namespace ConstructionSaaS.Infrastructure.Persistence;
 
-        public DbSet<Company> Companies { get; set; }
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+{
+    public ApplicationDbContext(
+        DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+    public DbSet<Company> Companies { get; set; }
         public DbSet<Project> Projects { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<ApplicationUser>()
+    .HasOne(user => user.Company)
+    .WithMany()
+    .HasForeignKey(user => user.CompanyId)
+    .OnDelete(DeleteBehavior.Restrict);
+        base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Company>(entity =>
             {
@@ -53,4 +59,3 @@ namespace ConstructionSaaS.Infrastructure.Persistence
             });
         }
     }
-}

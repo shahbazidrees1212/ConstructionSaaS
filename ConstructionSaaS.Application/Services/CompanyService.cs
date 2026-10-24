@@ -13,7 +13,7 @@ public class CompanyService : ICompanyService
         _companyRepository = companyRepository;
     }
 
-    public async Task<int> CreateAsync(CreateCompanyDto dto)
+    public async Task<int> CreateAsync(CreateCompanyDto dto, string userId)
     {
         var company = new Company
         {
@@ -31,6 +31,64 @@ public class CompanyService : ICompanyService
             Country = dto.Country.Trim()
         };
 
-        return await _companyRepository.AddAsync(company);
+        return await _companyRepository.AddForUserAsync(company, userId);
+    }
+
+    public async Task<List<CompanyDto>> GetAllAsync(int companyId)
+    {
+        var companies = await _companyRepository.GetAllAsync(companyId);
+
+        return companies.Select(c => new CompanyDto
+        {
+            Id = c.Id,
+            Name = c.Name,
+            IsActive = c.IsActive
+        }).ToList();
+    }
+
+    public async Task<CompanyDto?> GetByIdAsync(int id, int companyId)
+    {
+        var company = await _companyRepository.GetByIdAsync(id, companyId);
+
+        if (company == null)
+            return null;
+
+        return new CompanyDto
+        {
+            Id = company.Id,
+            Name = company.Name,
+            IsActive = company.IsActive
+        };
+    }
+
+    public async Task<bool> UpdateAsync(
+        int id,
+        UpdateCompanyDto dto,
+        int companyId)
+    {
+        var company = await _companyRepository.GetByIdAsync(id, companyId);
+
+        if (company == null)
+            return false;
+
+        company.Name = dto.Name.Trim();
+        company.UpdatedAtUtc = DateTime.UtcNow;
+
+        await _companyRepository.UpdateAsync(company);
+        return true;
+    }
+
+    public async Task<bool> DeactivateAsync(int id, int companyId)
+    {
+        var company = await _companyRepository.GetByIdAsync(id, companyId);
+
+        if (company == null)
+            return false;
+
+        company.IsActive = false;
+        company.UpdatedAtUtc = DateTime.UtcNow;
+
+        await _companyRepository.UpdateAsync(company);
+        return true;
     }
 }
