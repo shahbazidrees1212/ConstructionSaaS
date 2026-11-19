@@ -1,0 +1,42 @@
+@model ConstructionSaaS.Web.Models.ManagerDashboardViewModel
+@{
+    Layout = "_ManagerModuleLayout";
+    ViewData["Active"] = "Dashboard"; ViewData["Title"] = "Overview";
+    var reports = Model.Report?.Projects ?? new();
+    var name = Model.AccountEmail.Split('@')[0];
+}
+<div class="overview-heading"><div><h1>Project overview</h1><p>Your work, organized in one place.</p></div><time datetime="@DateTime.UtcNow.ToString("yyyy-MM-dd")">@DateTime.UtcNow.ToString("ddd, dd MMM yyyy")</time></div>
+<section class="module-hero"><div><p class="eyebrow">PROJECT MANAGER WORKSPACE</p><h1>Every project.<br />A clearer picture.</h1><p>Welcome back, @name. Review your assigned projects, progress and upcoming delivery dates.</p></div><a class="primary-button" asp-controller="TaskBoard" asp-action="Index">Open task board</a></section>
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage)) { <p class="module-notice error" role="alert">@Model.ErrorMessage</p> }
+<section class="module-metrics" aria-label="Project overview">
+<article><span>Assigned projects</span><strong>@(Model.ProjectsLoaded ? Model.TotalProjects.ToString() : "—")</strong></article>
+<article><span>Active projects</span><strong>@(Model.ProjectsLoaded ? Model.ActiveProjects.ToString() : "—")</strong></article>
+<article><span>Completed projects</span><strong>@(Model.ProjectsLoaded ? Model.CompletedProjects.ToString() : "—")</strong></article>
+<article><span>Planning</span><strong>@(Model.ProjectsLoaded ? Model.PlanningProjects.ToString() : "—")</strong></article>
+</section>
+<div class="manager-shortcuts">
+<a asp-controller="ManagerWorkspace" asp-action="Schedule">Schedule →<small>Plan milestones and update progress</small></a>
+<a asp-controller="ManagerWorkspace" asp-action="Documents">Documents →<small>Upload and access project files</small></a>
+<a asp-controller="ManagerWorkspace" asp-action="Reports">Reports →<small>Review delivery and export CSV</small></a>
+<a asp-controller="ManagerWorkspace" asp-action="Settings">My profile →<small>Manage email and account security</small></a>
+</div>
+@if (Model.Report != null) {
+<section class="manager-insights" aria-label="Delivery alerts">
+<a asp-controller="TaskBoard" asp-action="Index"><span>Task alerts</span><strong>@reports.Sum(p => p.OverdueTasks)</strong><small>Overdue tasks · @reports.Sum(p => p.CompletedTasks) of @reports.Sum(p => p.Tasks) completed</small></a>
+<a asp-controller="ManagerWorkspace" asp-action="Schedule"><span>Needs attention</span><strong>@reports.Sum(p => p.OverdueMilestones)</strong><small>Overdue milestones</small></a>
+<a asp-controller="ManagerWorkspace" asp-action="Reports"><span>Delivery risk</span><strong>@reports.Count(p => p.End.HasValue && p.End.Value.Date < DateTime.UtcNow.Date && p.Status != "Completed" && p.Status != "Cancelled")</strong><small>Projects past their planned end date</small></a>
+<a asp-controller="ManagerWorkspace" asp-action="Documents"><span>Project library</span><strong>@reports.Sum(p => p.Documents)</strong><small>Documents across assigned projects</small></a>
+</section>
+<section class="panel delivery-panel"><div class="module-heading"><h2>Delivery at a glance</h2><a class="text-link" asp-controller="ManagerWorkspace" asp-action="Reports">Full report →</a></div><p class="module-muted">Live milestone progress and planned handovers.</p>
+@foreach(var p in reports.OrderBy(p => p.End).Take(6)) {
+<div class="delivery-row"><div><a asp-controller="ManagerProjects" asp-action="Details" asp-route-id="@p.Id"><strong>@p.Name</strong></a><small>@(p.End.HasValue ? "Planned delivery: " + p.End.Value.ToString("dd MMM yyyy") : "Delivery not scheduled")</small></div><div class="delivery-progress">@(p.Progress.HasValue ? p.Progress + "% complete" : "No milestones yet")<progress value="@(p.Progress ?? 0)" max="100" aria-label="Milestone progress for @p.Name"></progress></div></div>
+}
+@if(reports.Count == 0) { <p class="module-empty">Project delivery information will appear here.</p> }
+</section>
+}
+<section class="panel"><div class="module-heading"><h2>Your assigned projects</h2><a class="module-secondary" asp-controller="ManagerProjects" asp-action="Index">View all projects →</a></div><p class="module-muted">Open a project to review its details and timeline.</p>
+<div class="project-cards">@foreach(var p in Model.Projects.Take(6)) {
+<a class="project-card" asp-controller="ManagerProjects" asp-action="Details" asp-route-id="@p.Id"><small>@p.ProjectCode</small><h3>@p.Name</h3><p>@string.Join(", ", new[] { p.City, p.Country }.Where(v => !string.IsNullOrWhiteSpace(v)))</p><p>Planned delivery: <strong>@(p.PlannedEndDateUtc?.ToString("dd MMM yyyy") ?? "Not scheduled")</strong></p><div class="project-card-footer"><span class="mp-badge" data-status="@p.Status">@p.Status</span><strong>View project →</strong></div></a>
+}</div>
+@if(Model.ProjectsLoaded && Model.Projects.Count == 0) { <p class="module-empty">No projects assigned yet. Your company administrator can add you to a project.</p> }
+</section>

@@ -1,0 +1,2 @@
+@{ Layout = ViewData["IsManager"] is true ? "_ManagerModuleLayout" : "_AdminWorkspaceLayout"; ViewData["Title"] = "Workspace unavailable"; }
+<section class="panel module-empty" role="alert"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><h1>We couldn't load your workspace</h1><p>Please try again shortly. If this keeps happening, contact your company administrator.</p><a class="primary-button" asp-controller="@(ViewData["IsManager"] is true ? "ManagerDashboard" : "Dashboard")" asp-action="Index">Back to dashboard</a></section>

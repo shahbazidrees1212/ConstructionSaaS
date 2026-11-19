@@ -1,0 +1,28 @@
+﻿@model List<ConstructionSaaS.Web.Controllers.PlatformCompanyViewModel>
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Company subscriptions | ConstructionSaaS</title>
+<link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/subscriptions.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/workspace-polish.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/workspace-refinement.css" asp-append-version="true" />
+</head><body class="subscription-platform"><main>
+<header class="platform-header"><a asp-action="Platform">ConstructionSaaS <span class="subscription-cadence">Platform owner</span></a><form asp-controller="Account" asp-action="Logout" method="post"><button class="secondary-button" type="submit">Sign out</button></form></header>
+<partial name="_WorkspaceNotices" />
+<section class="module-hero"><div><p class="eyebrow">SUBSCRIPTION OPERATIONS</p><h1>Company subscriptions</h1><p>Review company access, billing status and verified paid periods.</p></div></section>
+<section class="module-metrics" aria-label="Company subscription overview">
+<article><span>Companies</span><strong>@Model.Count</strong></article>
+<article><span>Active subscriptions</span><strong>@Model.Count(c => c.Subscription?.Status == "Active")</strong></article>
+<article><span>Awaiting subscription</span><strong>@Model.Count(c => c.Subscription == null || c.Subscription.Status == "Pending")</strong></article>
+<article><span>Payment attention</span><strong>@Model.Count(c => c.Subscription?.Status is "PastDue" or "Suspended")</strong></article>
+</section>
+<section class="panel"><div class="module-heading"><h2>Company directory</h2><span class="subscription-cadence">@Model.Count companies</span></div>
+<p class="module-muted">Sandbox records are test subscriptions. Verify status to refresh a company's provider record.</p>
+@if(Model.Count==0){<div class="platform-empty">No registered companies yet.</div>}else{
+<div class="subscription-table" role="region" aria-label="Company subscriptions" tabindex="0"><table><thead><tr><th scope="col">Company</th><th scope="col">Plan</th><th scope="col">Status</th><th scope="col">Environment</th><th scope="col">Paid through (UTC)</th><th scope="col">Action</th></tr></thead><tbody>
+@foreach(var c in Model){<tr><td><strong>@c.Name</strong><br/><span class="module-muted">@c.Email</span></td><td>@(c.Subscription?.PlanName??"No plan")</td><td><span class="subscription-status @(c.Subscription?.Status=="Active"?"positive":"neutral")">@(c.Subscription?.Status??"Not subscribed")</span></td><td>@(c.Subscription==null?"Not configured":c.Subscription.IsSandbox?"Sandbox":"Live")</td><td>@(c.Subscription?.PaidThroughUtc?.ToString("dd MMM yyyy")??"Not verified")</td><td>@if(c.Subscription!=null){<form asp-action="ReconcileCompany" method="post"><input type="hidden" name="id" value="@c.Id"/><button type="submit" class="secondary-button">Verify status</button></form>}</td></tr>}
+</tbody></table></div>}
+</section><footer class="footer">&copy; @DateTime.UtcNow.Year ConstructionSaaS &middot; Platform administration</footer>
+</main></body></html>

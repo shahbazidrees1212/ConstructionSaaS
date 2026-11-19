@@ -1,0 +1,16 @@
+@model BillingViewModel
+@{ Layout = "_AdminWorkspaceLayout"; ViewData["Title"] = "Invoices & payments"; ViewData["Active"] = "Billing"; }
+<section class="module-hero"><div><p class="eyebrow">PROJECT FINANCES</p><h1>Clear invoices. Confident payments.</h1><p>Collect project payments through Stripe and PayPal, with a verified record for every invoice.</p></div><a class="primary-button" asp-action="Create">Create invoice</a></section>
+<section class="module-columns" aria-label="Payment accounts">
+@foreach (var provider in Model.Providers) {
+    <article class="panel"><div class="module-heading"><h2>@provider.Name</h2><span class="module-pill">@(provider.Configured ? (provider.Sandbox ? "Sandbox" : "Live") : "Not connected")</span></div><p class="module-muted">@(provider.Configured ? (provider.Sandbox ? "Test payments only. No real funds are collected." : "Payments go to your company's configured merchant account.") : "Ask your deployment administrator to connect your company merchant account.")</p></article>
+}
+</section>
+<section class="panel"><div class="module-heading"><h2>Invoices</h2><span class="module-muted">Page @Model.Page · @Model.Invoices.Count shown</span></div>
+<p class="module-muted">Amounts retain their original currency. Sandbox invoices are test records.</p>
+<div class="module-table-wrap"><table><thead><tr><th>Invoice / project</th><th>Client</th><th>Amount</th><th>Due date</th><th>Status</th><th>Payment method</th></tr></thead><tbody>
+@foreach (var item in Model.Invoices) { <tr><td><a asp-action="Details" asp-route-id="@item.Id"><strong>@item.Number</strong></a><small>@item.ProjectName</small></td><td>@item.ClientName</td><td>@item.Currency @item.Total.ToString("N2")</td><td>@item.DueDateUtc.ToString("dd MMM yyyy")</td><td><span class="module-pill @(item.IsOverdue ? "danger" : "")">@(item.IsOverdue ? "Overdue" : item.Status)</span></td><td>@item.Provider @if(item.IsSandbox) { <small>Sandbox</small> }</td></tr> }
+@if (Model.Invoices.Count == 0) { <tr><td colspan="6" class="module-empty">No invoices here yet. Connect a payment account, then issue your first project invoice.</td></tr> }
+</tbody></table></div>
+<div class="module-heading">@if(Model.Page > 1) { <a class="secondary-button" asp-route-page="@(Model.Page - 1)">Previous page</a> } @if(Model.Invoices.Count == 50) { <a class="secondary-button" asp-route-page="@(Model.Page + 1)">Next page</a> }</div>
+</section>

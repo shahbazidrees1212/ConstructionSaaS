@@ -1,0 +1,27 @@
+@model BillingViewModel
+@{ Layout = "_AdminWorkspaceLayout"; ViewData["Title"] = "Create invoice"; ViewData["Active"] = "Billing"; }
+<section class="module-hero"><div><p class="eyebrow">PROJECT FINANCES</p><h1>Invoice your next milestone.</h1><p>Review the client, currency and line items before issuing. Issued invoices retain their original details.</p></div><a class="secondary-button" asp-action="Index">Back to invoices</a></section>
+<section class="panel">
+<form asp-action="Create" method="post" class="module-form">
+<div asp-validation-summary="All" class="text-danger" role="alert"></div>
+<div class="module-form-grid">
+<label>Project<select asp-for="Input.ProjectId" required><option value="">Choose a project</option>@foreach(var p in Model.Projects.Projects) { <option value="@p.Id">@p.Code — @p.Name</option> }</select></label>
+<label>Invoice number<input asp-for="Input.Number" placeholder="INV-2026-001" maxlength="40" required /><small>Unique within this project.</small></label>
+<label>Client name<input asp-for="Input.ClientName" maxlength="150" required /></label>
+<label>Client email<input asp-for="Input.ClientEmail" type="email" maxlength="254" required /></label>
+<label>Currency<select asp-for="Input.Currency" required><option value="">Choose currency</option>@foreach(var currency in new[]{"USD","EUR","GBP","CAD","AUD"}) { <option value="@currency">@currency</option> }</select></label>
+<label>Collect with<select asp-for="Input.Provider" required><option value="">Choose provider</option>@foreach(var p in Model.Providers) { <option value="@p.Name" disabled="@(!p.Configured)">@p.Name — @(p.Configured ? (p.Sandbox ? "Sandbox / test" : "Live") : "Not connected")</option> }</select></label>
+<label>Due date<input asp-for="Input.DueDateUtc" type="date" min="@DateTime.UtcNow.ToString("yyyy-MM-dd")" required /></label>
+</div>
+<p class="module-muted">Choose the currency agreed with your client. There is no automatic conversion from the project budget. Totals are the final amount payable; this version does not calculate tax.</p>
+<h2>Invoice items</h2>
+<div id="invoice-lines">
+@for(var i = 0; i < Model.Input.Lines.Count; i++) {
+<div class="invoice-line module-form-grid"><label>Description<input asp-for="Input.Lines[i].Description" maxlength="250" required /></label><label>Quantity<input asp-for="Input.Lines[i].Quantity" type="number" min="1" max="10000" required /></label><label>Unit price<input asp-for="Input.Lines[i].UnitPrice" type="number" min="0.01" max="1000000" step="0.01" required /></label><button type="button" class="secondary-button remove-line">Remove item</button></div>
+}
+</div>
+<button type="button" id="add-invoice-line" class="secondary-button">Add item</button>
+<p class="module-muted">The server calculates the final total. Each invoice is collected in one payment through the selected provider.</p>
+<button type="submit" class="primary-button" disabled="@(!Model.Providers.Any(p => p.Configured) || Model.Projects.Projects.Count == 0)">Issue invoice</button>
+</form></section>
+@section Scripts { <script src="~/js/billing.js" asp-append-version="true" defer></script> }

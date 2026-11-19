@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Workspace-local EF tool
+.tools/
+
+# Local builds and responsive browser artifacts
+artifacts/

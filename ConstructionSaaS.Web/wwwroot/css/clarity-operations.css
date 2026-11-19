@@ -1,0 +1,55 @@
+/* Documents, reports and company billing: aligned with the Clarity dashboard. */
+.clarity-workspace .document-upload{border-top:3px solid #ad7443}
+.clarity-workspace .document-upload .upload-zone{background:#f2f2e9;border:1px dashed #9daa94;border-radius:10px;min-height:155px;padding:24px;color:#254937}
+.clarity-workspace .upload-zone>i{color:#9a6a3c;font-size:28px}
+.clarity-workspace .upload-zone input{max-width:520px;width:100%;min-width:0;background:#fff9}
+.clarity-workspace .upload-zone input::file-selector-button{background:#204f43;color:white;border:0;border-radius:5px;padding:10px 14px;margin-right:12px;cursor:pointer}
+.clarity-workspace .document-upload .module-form{gap:18px}
+.clarity-workspace .document-upload .primary-button{align-self:flex-start}
+.clarity-workspace .document-library table{min-width:780px}
+.clarity-workspace .document-library td:first-child{min-width:230px;max-width:350px;overflow-wrap:anywhere}
+.document-file-icon{display:inline-grid;place-items:center;background:#e8ecdf;color:#31543b;width:32px;height:36px;border-radius:6px;margin-right:10px;vertical-align:middle}
+.clarity-workspace .document-library .module-actions{flex-wrap:nowrap}
+.clarity-workspace .module-danger{background:#fff7f1;border:1px solid #dfc4b2;color:#964c2a;border-radius:7px}
+.clarity-workspace .project-picker{border-color:#d1cabe;background:#fff8;border-radius:10px}
+.clarity-workspace .report-insights .panel{border-top:3px solid #a98a61}
+.clarity-workspace .budget-row{border-color:#ded8cc;padding:16px 0;font-variant-numeric:tabular-nums}
+.clarity-workspace .budget-row strong{color:#234c38}
+.clarity-workspace .report-status-row{margin-bottom:18px}
+.clarity-workspace .report-status-row .budget-row{border:0;padding-bottom:9px}
+.clarity-workspace .report-status-row progress{display:block;width:100%;height:8px;border:0;border-radius:10px;overflow:hidden}
+.clarity-workspace progress::-webkit-progress-bar{background:#e4e1d9;border-radius:10px}
+.clarity-workspace progress::-moz-progress-bar{background:#204f43}
+.clarity-workspace .delivery-report table{min-width:820px}
+.clarity-workspace .delivery-report td{font-variant-numeric:tabular-nums}
+.clarity-workspace .delivery-report td:first-child{min-width:210px}
+.clarity-workspace .delivery-report a{color:#28543d}
+.report-progress{display:block;width:90px;height:6px;margin-top:8px;border:0;border-radius:8px;overflow:hidden}
+.clarity-workspace .subscription-workspace{max-width:none}
+.clarity-workspace .subscription-page-heading{margin-bottom:26px}
+.clarity-workspace .subscription-page-heading h2{font-size:28px;color:#183d30}
+.clarity-workspace .subscription-anchor{color:#31583e}
+.clarity-workspace .subscription-summary{border-left:4px solid #a77545!important;background:#fffaf1;padding:26px;gap:24px}
+.clarity-workspace .subscription-summary dl{gap:20px}
+.clarity-workspace .subscription-summary dt{color:#707568;font-size:12px}
+.clarity-workspace .subscription-summary dd{color:#234333;font-size:14px}
+.clarity-workspace .subscription-summary .eyebrow{color:#95643a}
+.clarity-workspace .subscription-workspace .secondary-button{background:#fff9;border:1px solid #bcbcaf;color:#254a36;border-radius:7px;min-height:44px;padding:11px 16px}
+.clarity-workspace .subscription-workspace .module-notice:not(.error){background:#f0ecdf;color:#645e46;border:1px solid #ddd3ba;border-radius:8px;padding:16px 20px}
+.clarity-workspace .subscription-plans{gap:24px;margin:24px 0 30px}
+.clarity-workspace .subscription-plan{background:#fff9;padding:28px;border-top:3px solid #c7c8b8}
+.clarity-workspace .subscription-plan h3{color:#1f4735;font-size:26px}
+.clarity-workspace .subscription-plan .eyebrow{color:#8f663e}
+.clarity-workspace .subscription-yearly{border-color:#9caf99!important;border-top:3px solid #204f43!important;background:linear-gradient(145deg,#f7faf1,#fffaf2)}
+.clarity-workspace .subscription-cadence{background:#e9ecdf;color:#36543c;padding:6px 10px}
+.clarity-workspace .subscription-price{color:#204f43;font-size:42px!important}
+.clarity-workspace .subscription-plan>p:not(.subscription-price),.clarity-workspace .subscription-price small{color:#6b7467}
+.clarity-workspace .subscription-plan ul{border-color:#d8dacc}
+.clarity-workspace .subscription-plan li{color:#304b3a}
+.clarity-workspace .subscription-plan select{border-color:#bfc8b8;border-radius:7px}
+.clarity-workspace .subscription-empty{background:#f2f2e9;border-color:#cbd2c0}
+.clarity-workspace .subscription-empty>span{background:#e2e9d9;color:#3b5c41}
+.clarity-workspace .subscription-table th{background:#ede8dd;color:#294333}
+.clarity-workspace .subscription-table td{border-color:#ded8cc}
+.clarity-workspace .subscription-workspace summary{color:#795336;cursor:pointer;padding:12px 0}
+@media(max-width:760px){.clarity-workspace .document-upload .upload-zone{padding:18px 12px}.clarity-workspace .document-upload .primary-button{width:100%;justify-content:center}.clarity-workspace .report-insights{grid-template-columns:1fr}.clarity-workspace .subscription-plans{grid-template-columns:1fr}.clarity-workspace .subscription-summary,.clarity-workspace .subscription-plan{padding:20px}.clarity-workspace .subscription-summary dl{display:grid;grid-template-columns:1fr}.clarity-workspace .subscription-workspace .secondary-button{width:100%;white-space:normal}.clarity-workspace .subscription-page-heading h2{font-size:24px}}

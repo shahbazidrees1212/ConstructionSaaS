@@ -1,0 +1,50 @@
+/* Shared workspace finish: calm surfaces, consistent density and clear focus. */
+:root{--ui-ink:#1d3345;--ui-muted:#657788;--ui-line:#e1e7ec;--ui-canvas:#f5f7f9;--ui-accent:#f2bc58;--ui-shadow:0 2px 8px #162d4004}
+body{font-size:14px;line-height:1.55}
+.admin-dashboard .sidebar{background:#172c3b}.admin-dashboard .topbar{min-height:68px;padding-block:12px}.admin-dashboard .welcome{background:#203e51;border:0;border-radius:14px;min-height:240px}.admin-dashboard .welcome h1{font-size:clamp(30px,3vw,40px);line-height:1.18}.admin-dashboard .stat-card{border-radius:12px;box-shadow:var(--ui-shadow)}.admin-dashboard .panel{border-radius:12px;box-shadow:var(--ui-shadow)}.admin-dashboard .nav-link.active{background:#f2bc58}.admin-dashboard .stat-card h3{font-variant-numeric:tabular-nums}
+.sidebar,.manager-sidebar,.workspace-sidebar{background:#172c3b}
+.sidebar .nav-link,.manager-sidebar nav a,.workspace-sidebar nav a{border-radius:7px;font-weight:500;color:#c5d1db;min-height:42px}
+.sidebar .nav-link:hover,.manager-sidebar nav a:hover,.workspace-sidebar nav a:hover{background:#ffffff0b;color:#fff}
+.sidebar .nav-link.active,.manager-sidebar nav a.selected,.workspace-sidebar nav a.active{background:#f2bc58;color:#172c3b;box-shadow:none;font-weight:700}
+.sidebar .nav-link i,.workspace-nav-icon{opacity:.85}
+.nav-caption,.nav-label{color:#96aab9!important;font-weight:600;letter-spacing:.14em}
+.manager-brand,.brand{letter-spacing:-.025em}
+.manager-topbar,.topbar,.workspace-topbar{min-height:68px}
+.profile-link,.topbar-create{border:1px solid var(--ui-line);border-radius:9px;padding:8px 12px;background:#fff;font-size:12px}
+.profile-link:hover,.topbar-create:hover{background:#f4f7f9}
+.panel,.mp-panel,.details-card,.form-card,.project-card{border-radius:12px;box-shadow:var(--ui-shadow)}
+.module-hero,.mp-header,.details-header{background:#203e51;border-radius:14px;padding:28px 32px;box-shadow:none}
+.module-hero h1,.mp-header h1,.details-header h1{font-size:clamp(25px,2.5vw,34px);letter-spacing:-.035em;line-height:1.22;margin:10px 0 12px}
+.module-hero p:not(.eyebrow){font-size:14px;color:#d0dce3;line-height:1.65}
+.eyebrow{font-size:10px!important;font-weight:750;letter-spacing:.14em!important}
+.module-metrics{gap:16px}
+.module-metrics article,.mp-stat{border-radius:12px;border-top:1px solid var(--ui-line);padding:22px 24px;background:#fff}
+.module-metrics article span,.mp-stat p{color:var(--ui-muted);font-size:12px;font-weight:600}
+.module-metrics strong{font-size:32px;font-variant-numeric:tabular-nums;margin-top:10px}
+.module-heading h2,.panel>h2{font-size:18px;letter-spacing:-.025em}
+.module-heading{gap:16px;flex-wrap:wrap}
+.manager-shortcuts a{border:1px solid var(--ui-line);box-shadow:none;border-radius:10px;padding:20px;background:#fff;font-size:14px}
+.manager-shortcuts a:hover{border-color:#a9bdca;background:#fafcfd}
+.manager-shortcuts small{margin-top:8px;font-weight:400;color:var(--ui-muted)}
+.manager-insights>a{box-shadow:none;border-radius:12px;border:1px solid var(--ui-line)}
+.project-picker{padding:16px;border-radius:10px;box-shadow:none}
+.module-form label,.form-label{font-weight:600;color:#354c5f}
+.module-form input,.module-form select,.module-form textarea,.project-picker select,.project-picker input{border-radius:7px;border-color:#ced9e1}
+.primary-button,.secondary-button,.module-secondary,.save-button,.mp-btn{border-radius:8px;min-height:44px;line-height:1.4}
+.primary-button:disabled{box-shadow:none}
+.module-table-wrap thead,.subscription-table thead{background:#f6f8fa}
+th{font-weight:650;letter-spacing:.03em;color:#647789}
+td{font-size:13px}
+.task-card{padding:24px 0;border-bottom:1px solid var(--ui-line)}
+.task-card:last-child{border-bottom:0}
+.task-card .module-heading h2{font-size:19px}
+.module-pill{font-weight:650;letter-spacing:.01em}
+.task-card summary,details>summary{padding:10px 0;font-weight:650}
+.module-notice{border-radius:8px;font-size:13px}
+.footer,.manager-footer{padding-top:26px;margin-top:28px;border-top:1px solid var(--ui-line)}
+.subscription-platform .platform-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;margin-bottom:8px}
+.platform-header a{font-size:17px;font-weight:750;text-decoration:none;color:var(--ui-ink)}
+.platform-header form{margin:0}
+@media(min-width:761px){.manager-topbar,.topbar{position:sticky;top:0;z-index:20}.manager-sidebar{padding-top:28px}.content,.manager-modules{max-width:1680px;margin-inline:auto}.subscription-workspace{padding:32px}}
+@media(max-width:760px){.module-hero,.mp-header,.details-header{padding:24px;border-radius:12px}.module-metrics{gap:12px}.module-metrics article{padding:18px}.subscription-workspace{padding:18px}.workspace-menu-button{border-color:#526573}.profile-link,.topbar-create{padding:7px 10px}.subscription-platform .platform-header{flex-wrap:wrap}}
+@media(max-width:420px){.module-metrics strong{font-size:27px}.module-metrics article{padding:16px}.module-hero h1{font-size:26px}}

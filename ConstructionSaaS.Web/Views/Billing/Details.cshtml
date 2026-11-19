@@ -1,0 +1,12 @@
+@model ConstructionSaaS.Application.DTOs.Billing.InvoiceDto
+@{ Layout = "_AdminWorkspaceLayout"; ViewData["Title"] = "Invoice " + Model.Number; ViewData["Active"] = "Billing"; }
+<section class="module-hero"><div><p class="eyebrow">@Model.ProjectName</p><h1>@Model.Number</h1><p>@Model.ClientName · @Model.Provider @(Model.IsSandbox ? "sandbox" : "")</p></div><a class="secondary-button" asp-action="Index">All invoices</a></section>
+<section class="module-metrics"><article><span>Amount</span><strong>@Model.Currency @Model.Total.ToString("N2")</strong></article><article><span>Status</span><strong>@(Model.IsOverdue ? "Overdue" : Model.Status)</strong></article><article><span>Due date</span><strong>@Model.DueDateUtc.ToString("dd MMM yyyy")</strong></article></section>
+<section class="panel"><h2>Invoice details</h2><partial name="_InvoiceLines" model="Model" />
+@if(Model.PaidAtUtc.HasValue) { <p>Payment confirmed: @Model.PaidAtUtc.Value.ToString("dd MMM yyyy, HH:mm") UTC</p><p>Provider reference: <span class="payment-reference">@Model.PaymentReference</span></p> }
+@if(Model.IsSandbox) { <p class="module-muted">Sandbox record. This does not represent money received.</p> }
+@if(Model.Status == "Open") { <label>Client payment link<input value="@Model.PaymentUrl" readonly aria-label="Client payment link" class="payment-link" /></label><p class="module-muted">Share this private link only with your client. Anyone holding it can view and pay this invoice.</p><a class="secondary-button" href="@Model.PaymentUrl" rel="noreferrer">Open payment page</a> }
+<div class="billing-actions"><form asp-action="Refresh" method="post"><input type="hidden" name="id" value="@Model.Id" /><button class="secondary-button">Check provider status</button></form>
+@if(Model.Status == "Open") { <form asp-action="Void" method="post"><input type="hidden" name="id" value="@Model.Id" /><button class="secondary-button">Void unused invoice</button></form> }
+</div><p class="module-muted">An invoice can only be voided before checkout starts. For expired checkouts, issue a replacement invoice. Manage refunds in the merchant dashboard, then check provider status here.</p>
+</section>

@@ -1,0 +1,218 @@
+        <aside class="sidebar">
+
+
+
+            <a asp-controller="Dashboard"
+
+               asp-action="Index"
+
+               class="brand">
+
+
+
+                <span class="brand-mark">C</span>
+
+
+
+                <span>
+
+                    Construction<span class="brand-light">SaaS</span>
+
+                </span>
+
+
+
+            </a>
+
+
+
+            <p class="nav-label">WORKSPACE</p>
+
+
+
+            <nav class="nav-list"
+
+                 aria-label="Main navigation">
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index"
+
+                   aria-current="@(ViewData["Active"]?.ToString() == "Dashboard" ? "page" : null)">
+
+
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>Dashboard</span>
+
+
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Projects" ? "active" : "")" asp-controller="Projects" asp-action="Index">
+
+
+
+                    <i class="fa-regular fa-folder-open"></i>
+
+                    <span>Projects</span>
+
+
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Activity" ? "active" : "")" asp-controller="Workspace" asp-action="Activity">
+                    <i class="fa-regular fa-clock"></i>
+
+                    <span>Recent Activity</span>
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Schedule" ? "active" : "")" asp-controller="Workspace" asp-action="Schedule">
+                    <i class="fa-regular fa-calendar"></i>
+
+                    <span>Schedule</span>
+
+                </a>
+
+
+
+            </nav>
+
+
+
+            <p class="nav-label">MANAGEMENT</p>
+
+
+
+            <nav class="nav-list"
+
+                 aria-label="Management navigation">
+
+
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "CompanyProfile" ? "active" : "")" asp-controller="CompanyProfile" asp-action="Index">
+
+                    <i class="fa-regular fa-building"></i>
+
+                    <span>Company Profile</span>
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "TeamMembers" ? "active" : "")" asp-controller="TeamMembers" asp-action="Index">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <span>Team Members</span>
+
+                </a>
+
+
+
+                <!-- PROJECT ASSIGNMENTS -->
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "ProjectAssignments" ? "active" : "")" asp-controller="ProjectAssignments" asp-action="Index">
+
+                    <i class="fa-solid fa-user-check"></i>
+
+                    <span>Project Assignments</span>
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Documents" ? "active" : "")" asp-controller="Workspace" asp-action="Documents">
+                    <i class="fa-regular fa-file-lines"></i>
+
+                    <span>Documents</span>
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Reports" ? "active" : "")" asp-controller="Workspace" asp-action="Reports">
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    <span>Reports</span>
+
+                </a>
+
+
+
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Subscription" ? "active" : "")" asp-controller="Subscription" asp-action="Index"><i class="fa-solid fa-credit-card" aria-hidden="true"></i><span>Subscription &amp; billing</span></a>
+                <a class="nav-link @(ViewData["Active"]?.ToString() == "Settings" ? "active" : "")" asp-controller="Workspace" asp-action="Settings">
+                    <i class="fa-solid fa-gear"></i>
+
+                    <span>Settings</span>
+
+                </a>
+
+
+
+            </nav>
+
+
+
+            <div class="sidebar-bottom">
+
+
+
+                <div class="help-card">
+
+
+
+                    <div class="help-icon">
+
+                        <i class="fa-solid fa-headset"></i>
+
+                    </div>
+
+
+
+                    <strong>A stronger team. A better build.</strong>
+
+
+                    <p>
+
+                        Keep your construction operations
+
+                        organized in one place.
+
+                    </p>
+
+
+
+                    <a asp-controller="ProjectAssignments" asp-action="Index">Manage assignments <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+
+
+                </div>
+
+
+
+                <div class="sidebar-footer">
+
+                    ConstructionSaaS · v1.0
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </aside>
+
+
+<partial name="_LiveNotifications" />

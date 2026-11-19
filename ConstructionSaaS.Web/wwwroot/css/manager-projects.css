@@ -1,0 +1,295 @@
+
+    .mp-page {
+        padding: 28px;
+        background: #f4f7fc;
+        min-height: 100vh;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .mp-header {
+        background: linear-gradient(120deg, #14213d, #3449a5);
+        padding: 30px;
+        border-radius: 18px;
+        color: white;
+        margin-bottom: 24px;
+    }
+
+        .mp-header h2 {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .mp-header p {
+            margin: 0;
+            opacity: .85;
+        }
+
+    .mp-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 24px;
+    }
+
+    .mp-stat, .mp-panel {
+        background: white;
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 5px 20px rgba(25, 40, 75, .06);
+    }
+
+        .mp-stat span {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .mp-stat h3 {
+            font-size: 30px;
+            font-weight: 700;
+            margin: 10px 0 0;
+            color: #14213d;
+        }
+
+    .mp-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+        .mp-toolbar input, .mp-toolbar select {
+            padding: 12px 14px;
+            border: 1px solid #dbe2ef;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .mp-toolbar input {
+            flex: 1;
+            min-width: 0;
+        }
+
+    .mp-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .mp-table th {
+            background: #f8faff;
+            color: #64748b;
+            text-align: left;
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        .mp-table td {
+            padding: 17px 15px;
+            border-bottom: 1px solid #edf0f5;
+            color: #334155;
+        }
+
+            .mp-table td strong {
+                color: #14213d;
+            }
+
+    .mp-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #e9edff;
+        color: #3449a5;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .mp-btn {
+        display: inline-block;
+        padding: 9px 14px;
+        background: #3449a5;
+        color: white;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+        .mp-btn:hover {
+            background: #24377f;
+            color: white;
+        }
+
+    .mp-empty {
+        padding: 35px;
+        text-align: center;
+        color: #64748b;
+    }
+
+    @media (max-width: 768px) {
+        .mp-page {
+            padding: 14px;
+        }
+
+        .mp-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .mp-toolbar {
+            flex-direction: column;
+        }
+
+        .mp-panel {
+            overflow-x: auto;
+        }
+    }
+
+    .details-page {
+        min-height: 100vh;
+        background: #f4f7fc;
+        padding: 30px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .details-container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .details-back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #3449a5;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .details-header {
+        background: linear-gradient(120deg, #14213d, #3449a5);
+        padding: 32px;
+        border-radius: 18px;
+        color: white;
+        margin-bottom: 24px;
+    }
+
+        .details-header h2 {
+            font-weight: 700;
+            margin: 12px 0;
+        }
+
+        .details-header p {
+            opacity: .85;
+            margin: 0;
+        }
+
+    .details-code {
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .details-card {
+        background: white;
+        padding: 26px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(25, 40, 75, .06);
+    }
+
+        .details-card h4 {
+            color: #14213d;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+    .details-field {
+        padding: 13px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
+
+        .details-field:last-child {
+            border-bottom: none;
+        }
+
+    .details-label {
+        display: block;
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+
+    .details-value {
+        color: #1e293b;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+        .status-badge.planning {
+            background: #e9edff;
+            color: #3449a5;
+        }
+
+        .status-badge.active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.onhold {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+    .details-description {
+        margin-top: 20px;
+        background: white;
+        padding: 26px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(25, 40, 75, .06);
+    }
+
+        .details-description h4 {
+            color: #14213d;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .details-description p {
+            color: #475569;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+    @media (max-width: 768px) {
+        .details-page {
+            padding: 15px;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .details-header {
+            padding: 22px;
+        }
+    }

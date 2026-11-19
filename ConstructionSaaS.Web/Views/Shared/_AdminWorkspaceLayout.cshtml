@@ -1,0 +1,27 @@
+@{ var clarityPage = ViewData["Active"]?.ToString() is "Activity" or "Schedule" or "CompanyProfile" or "Documents" or "Reports" or "Subscription" or "Settings"; }
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>@ViewData["Title"] | ConstructionSaaS</title>
+
+
+
+<link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
+
+<link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/admin-dashboard.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" />
+
+@await RenderSectionAsync("Styles", required: false)
+
+<link rel="stylesheet" href="~/css/workspace-polish.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/workspace-refinement.css" asp-append-version="true" />
+
+@if (clarityPage) { <link rel="stylesheet" href="~/css/clarity-dashboard.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/clarity-workspace.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/clarity-operations.css" asp-append-version="true" /> }
+<link rel="stylesheet" href="~/css/clarity-people.css" asp-append-version="true" />
+</head><body class="admin-dashboard @(clarityPage ? "clarity-dashboard clarity-workspace" : "")"><a class="skip-link" href="#workspaceContent">Skip to content</a><div class="dashboard"><partial name="_AdminSidebar" /><main class="main"><header class="topbar"><div class="breadcrumb">Workspace <span>/</span><strong>@ViewData["Title"]</strong></div><a class="topbar-create" asp-controller="Workspace" asp-action="Settings"><i class="fa-regular fa-user" aria-hidden="true"></i> My account</a></header><div class="content module-content" id="workspaceContent"><partial name="_WorkspaceNotices" />@RenderBody()<footer class="footer"><span>&copy; @DateTime.Now.Year ConstructionSaaS</span><span>Plan. Build. Deliver.</span></footer></div></main></div>
+
+<script>document.querySelectorAll('.sidebar .nav-link').forEach(link => { link.setAttribute('aria-label', link.textContent.trim()); link.title = link.textContent.trim(); });</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+<script src="~/js/workspace-ui.js" asp-append-version="true" defer></script>
+
+</body></html>
+

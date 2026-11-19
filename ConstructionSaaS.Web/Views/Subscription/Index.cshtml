@@ -1,0 +1,45 @@
+@model ConstructionSaaS.Application.DTOs.Billing.SubscriptionOverviewDto
+@{
+    Layout = Model.IsAdmin ? "_AdminWorkspaceLayout" : "_ManagerLayout";
+    ViewData["Title"] = "Subscription & billing";
+    ViewData["Active"] = "Subscription";
+    var statusTone = Model.Status == "Active" ? "positive" : Model.Status is "PastDue" or "Suspended" or "Expired" ? "negative" : "neutral";
+}
+@section Styles { <link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/subscriptions.css" asp-append-version="true" /> }
+<div class="subscription-workspace @(Model.IsAdmin ? "subscription-admin" : "")">
+<div class="subscription-page-heading"><div><span class="eyebrow">ACCOUNT / BILLING</span><h2>Subscription &amp; billing</h2></div><a href="#subscription-details" class="subscription-anchor">View subscription details <span aria-hidden="true">&#8595;</span></a></div>
+<section class="module-hero"><div><p class="eyebrow">YOUR COMPANY WORKSPACE</p><h1>A plan for the way you build.</h1><p>Your company subscribes to ConstructionSaaS. One subscription covers your workspace and team.</p></div><span class="module-pill">@(Model.IsSandbox ? "Sandbox" : "Live billing")</span></section>
+@if (!Model.BillingEnabled) { <div class="module-notice" role="status">Subscription billing is being configured by the SaaS owner. Workspace access remains available; checkout is not enabled yet.</div> }
+@if (!Model.HasAccess) { <div class="module-notice error" role="alert">Your workspace needs an active, verified subscription. @(Model.IsAdmin ? "Choose a plan or check your payment status below." : "Please ask your CompanyAdmin to manage the subscription.") Your existing project data is retained.</div> }
+<section class="panel subscription-summary" id="subscription-details" aria-label="Current subscription">
+    <div><p class="eyebrow">CURRENT SUBSCRIPTION</p><h2>@(Model.PlanName ?? "Choose your first plan")</h2><span class="subscription-status @statusTone"><span aria-hidden="true"></span>@Model.Status</span>
+    @if (Model.CancelAtPeriodEnd) { <p>Renewal cancelled</p> }
+    </div>
+    <dl><div><dt>Price</dt><dd>@(Model.Amount.HasValue ? $"{Model.Currency} {Model.Amount:0.00} / {Model.Interval}" : "No plan selected")</dd></div><div><dt>Paid access until (UTC)</dt><dd>@(Model.PaidThroughUtc?.ToString("dd MMM yyyy, HH:mm") ?? "Awaiting verified payment")</dd></div><div><dt>Last verified (UTC)</dt><dd>@(Model.LastVerifiedAtUtc?.ToString("dd MMM yyyy, HH:mm") ?? "Not yet verified")</dd></div></dl>
+    @if (Model.IsAdmin && Model.Provider != null) {
+        <form asp-action="Refresh" method="post"><button class="secondary-button" type="submit">Check payment status</button></form>
+        @if(Model.Provider=="Stripe" && Model.Status is not("Pending" or "Expired")) { <form asp-action="Portal" method="post"><button class="secondary-button" type="submit">Manage payment method &amp; receipts</button></form> }
+    }
+</section>
+@if (Model.IsAdmin) {
+    @if (Model.IsSandbox) { <p class="module-notice">Test subscriptions only. No real funds are collected in sandbox mode.</p> }
+    <section aria-labelledby="plans-title"><h2 id="plans-title">Choose your subscription</h2><p class="module-muted">Recurring billing to the SaaS owner. Cancel future renewals from this page. Plan changes are available after your current subscription ends.</p>
+    <div class="subscription-plans">
+    @foreach (var plan in Model.Plans) {
+        <article class="panel subscription-plan @(plan.Interval == "year" ? "subscription-yearly" : "")"><div class="subscription-plan-top"><p class="eyebrow">@(plan.Interval == "year" ? "YEARLY MEMBERSHIP" : "MONTHLY MEMBERSHIP")</p><span class="subscription-cadence">@(plan.Interval == "year" ? "Billed yearly" : "Billed monthly")</span></div><h3>@plan.Name</h3><p>@plan.Description</p><p class="subscription-price"><span>@plan.Currency</span> @plan.Amount.ToString("N2") <small>/ @(plan.Interval == "year" ? "year" : "month")</small></p><p class="subscription-charge-note">@plan.Currency @plan.Amount.ToString("N2") charged every @(plan.Interval == "year" ? "year" : "month"). One subscription for your company.</p><ul><li>Company workspace and project management</li><li>Team assignments, tasks and progress</li><li>Documents, schedules and reporting</li></ul>
+        @if (Model.CanSubscribe && Model.BillingEnabled) {
+            <form asp-action="Checkout" method="post"><input type="hidden" name="PlanKey" value="@plan.Key" /><label for="provider-@plan.Key">Payment provider</label><select id="provider-@plan.Key" name="Provider" class="form-select" required><option value="">Choose payment provider</option>@if(plan.Stripe){<option value="Stripe">Stripe</option>}@if(plan.PayPal){<option value="PayPal">PayPal</option>}</select><button type="submit" class="primary-button" disabled="@(!plan.Stripe && !plan.PayPal)">Subscribe to @plan.Name</button></form>
+            @if (!plan.Stripe && !plan.PayPal) { <p class="module-muted">The SaaS owner needs to connect this plan to a payment provider.</p> }
+        } else if (Model.Status == "Pending" && Model.PlanName == plan.Name && Model.BillingEnabled) {
+            <form asp-action="Checkout" method="post"><input type="hidden" name="PlanKey" value="@plan.Key" /><input type="hidden" name="Provider" value="@Model.Provider" /><button type="submit" class="primary-button">Continue existing checkout</button></form>
+        }
+        </article>
+    }
+    @if(Model.Plans.Count==0){<div class="panel"><h3>Plans are being prepared</h3><p>The SaaS owner has not published subscription pricing yet. Contact the owner for availability.</p></div>}
+    </div></section>
+    <section class="panel"><h2>Subscription payment history</h2><p class="module-muted">Verified subscription charges for this company. Sandbox and live payments are labelled separately.</p>
+    @if(Model.Payments.Count==0){<div class="subscription-empty"><span aria-hidden="true">&#9636;</span><div><strong>No verified subscription payments yet.</strong><p>Your payment records will appear here after provider verification.</p></div></div>}else{<div class="subscription-table" role="region" aria-label="Payment history" tabindex="0"><table><thead><tr><th scope="col">Date (UTC)</th><th scope="col">Provider</th><th scope="col">Amount</th><th scope="col">Environment</th><th scope="col">Reference</th></tr></thead><tbody>@foreach(var p in Model.Payments){<tr><td>@p.PaidAtUtc.ToString("dd MMM yyyy")</td><td>@p.Provider</td><td>@p.Currency @p.Amount.ToString("N2")</td><td><span class="subscription-cadence">@(p.IsSandbox?"Sandbox":"Live")</span></td><td class="subscription-reference">@p.Reference</td></tr>}</tbody></table></div>}
+    </section>
+    @if(Model.CanCancel){<section class="panel"><h2>Manage renewal</h2><p>Cancellation stops future renewals. Your verified paid access remains available until the date above. This does not issue a refund.</p><details><summary>Cancel my subscription renewal</summary><form asp-action="Cancel" method="post"><p>Confirm that your company wants to stop automatic renewal.</p><button class="secondary-button" type="submit">Confirm cancellation</button></form></details></section>}
+}
+</div>

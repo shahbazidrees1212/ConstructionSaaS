@@ -1,0 +1,410 @@
+@model ConstructionSaaS.Web.Models.RegisterViewModel
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Create workspace | ConstructionSaaS";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#101b20" />
+
+    <title>@ViewData["Title"]</title>
+
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="@Url.Content("~/css/site.css")"
+          asp-append-version="true" />
+<link rel="stylesheet" href="~/css/workspace-polish.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/workspace-refinement.css" asp-append-version="true" />
+</head>
+
+<body class="cs-login cs-register">
+
+    <div class="cs-auth-scene">
+
+        <!-- BACKGROUND VIDEO -->
+        <video class="cs-scene-video"
+               autoplay
+               muted
+               loop
+               playsinline
+               preload="metadata"
+               aria-hidden="true">
+
+            <source src="@Url.Content("~/videos/construction-site.mp4")"
+                    type="video/mp4" />
+
+            <source src="https://videos.pexels.com/video-files/5594430/5594430-hd_1920_1080_25fps.mp4"
+                    type="video/mp4" />
+        </video>
+
+        <div class="cs-scene-overlay"></div>
+
+        <div class="cs-blueprint-grid"
+             aria-hidden="true"></div>
+
+        <!-- HEADER -->
+        <header class="cs-topbar">
+
+            <a class="cs-logo"
+               asp-controller="Home"
+               asp-action="Index"
+               aria-label="ConstructionSaaS home">
+
+                <span class="cs-logo-mark">
+                    <i class="fa-solid fa-compass-drafting"></i>
+                </span>
+
+                <span>
+                    <b>Construction</b>
+                    <em>SaaS</em>
+                    <small>PROJECT OPERATIONS</small>
+                </span>
+
+            </a>
+
+            <a class="cs-signin-link"
+               asp-controller="Account"
+               asp-action="Login">
+
+                Already a member?
+
+                <b>
+                    Sign in
+                    <i class="fa-solid fa-arrow-right"></i>
+                </b>
+
+            </a>
+
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="cs-auth-content">
+
+            <!-- LEFT SECTION -->
+            <section class="cs-register-story"
+                     aria-labelledby="register-story-title">
+
+                <p class="cs-eyebrow">
+                    <span></span>
+                    YOUR PROJECTS, CONNECTED
+                </p>
+
+                <h1 id="register-story-title">
+                    Start building<br />
+                    with <strong>clarity.</strong>
+                </h1>
+
+                <p class="cs-slide-copy">
+                    Set up your secure workspace and bring
+                    your projects, people and daily decisions
+                    into one place.
+                </p>
+
+                <ol class="cs-setup-steps">
+
+                    <li>
+                        <span>01</span>
+
+                        <div>
+                            <b>Create your account</b>
+                            <small>Your secure workspace begins here</small>
+                        </div>
+
+                        <i class="fa-solid fa-check"></i>
+                    </li>
+
+                    <li>
+                        <span>02</span>
+
+                        <div>
+                            <b>Set up your company</b>
+                            <small>Add your organisation details</small>
+                        </div>
+                    </li>
+
+                    <li>
+                        <span>03</span>
+
+                        <div>
+                            <b>Build with your team</b>
+                            <small>Invite people when you are ready</small>
+                        </div>
+                    </li>
+
+                </ol>
+
+            </section>
+
+            <!-- REGISTRATION FORM -->
+            <section class="cs-login-wrap cs-register-wrap"
+                     aria-labelledby="register-title">
+
+                <div class="cs-login-card cs-register-card">
+
+                    <div class="cs-card-heading">
+
+                        <div>
+                            <p>CREATE YOUR WORKSPACE</p>
+
+                            <h2 id="register-title">
+                                Let's get<br />
+                                <span>building.</span>
+                            </h2>
+                        </div>
+
+                        <span class="cs-card-icon">
+                            <i class="fa-solid fa-helmet-safety"></i>
+                        </span>
+
+                    </div>
+
+                    <p class="cs-card-intro">
+                        It takes less than a minute to get started.
+                    </p>
+
+                    <form asp-controller="Account"
+                          asp-action="Register"
+                          method="post"
+                          id="csRegisterForm">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="cs-validation-summary"
+                             role="alert">
+                        </div>
+
+                        <!-- FULL NAME AND COMPANY -->
+                        <div class="cs-register-grid">
+
+                            <div class="cs-form-group">
+
+                                <label asp-for="FullName">
+                                    Full name
+                                </label>
+
+                                <div class="cs-input-wrap">
+
+                                    <i class="fa-regular fa-user"></i>
+
+                                    <input asp-for="FullName"
+                                           placeholder="Your full name"
+                                           autocomplete="name" />
+
+                                </div>
+
+                                <span asp-validation-for="FullName"
+                                      class="cs-field-error"></span>
+
+                            </div>
+
+                            <div class="cs-form-group">
+
+                                <label asp-for="CompanyName">
+                                    Company name
+                                </label>
+
+                                <div class="cs-input-wrap">
+
+                                    <i class="fa-regular fa-building"></i>
+
+                                    <input asp-for="CompanyName"
+                                           placeholder="Your company"
+                                           autocomplete="organization" />
+
+                                </div>
+
+                                <span asp-validation-for="CompanyName"
+                                      class="cs-field-error"></span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- WORK EMAIL -->
+                        <div class="cs-form-group">
+
+                            <label asp-for="Email">
+                                Work email
+                            </label>
+
+                            <div class="cs-input-wrap">
+
+                                <i class="fa-regular fa-envelope"></i>
+
+                                <input asp-for="Email"
+                                       type="email"
+                                       placeholder="you@company.com"
+                                       autocomplete="email" />
+
+                            </div>
+
+                            <span asp-validation-for="Email"
+                                  class="cs-field-error"></span>
+
+                        </div>
+
+                        <!-- COUNTRY -->
+                        <div class="cs-form-group">
+
+                            <label asp-for="Country">
+                                Country
+                            </label>
+
+                            <div class="cs-input-wrap">
+
+                                <i class="fa-solid fa-globe"></i>
+
+                                <input asp-for="Country"
+                                       placeholder="e.g. Pakistan"
+                                       autocomplete="country-name" />
+
+                            </div>
+
+                            <span asp-validation-for="Country"
+                                  class="cs-field-error"></span>
+
+                        </div>
+
+                        <!-- PASSWORD FIELDS -->
+                        <div class="cs-register-grid">
+
+                            <div class="cs-form-group">
+
+                                <label asp-for="Password">
+                                    Password
+                                </label>
+
+                                <div class="cs-input-wrap">
+
+                                    <i class="fa-solid fa-lock"></i>
+
+                                    <input asp-for="Password"
+                                           type="password"
+                                           placeholder="8+ characters"
+                                           autocomplete="new-password" />
+
+                                </div>
+
+                                <span asp-validation-for="Password"
+                                      class="cs-field-error"></span>
+
+                            </div>
+
+                            <div class="cs-form-group">
+
+                                <label asp-for="ConfirmPassword">
+                                    Confirm password
+                                </label>
+
+                                <div class="cs-input-wrap">
+
+                                    <i class="fa-solid fa-lock"></i>
+
+                                    <input asp-for="ConfirmPassword"
+                                           type="password"
+                                           placeholder="Repeat password"
+                                           autocomplete="new-password" />
+
+                                </div>
+
+                                <span asp-validation-for="ConfirmPassword"
+                                      class="cs-field-error"></span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- SUBMIT BUTTON -->
+                        <button type="submit"
+                                class="cs-login-button"
+                                id="csRegisterButton">
+
+                            <span id="csRegisterText">
+                                Create secure workspace
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                    </form>
+
+                    <p class="cs-security-note">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Your account and workspace are protected
+
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="cs-footer">
+
+            <span>
+                © @DateTime.UtcNow.Year ConstructionSaaS
+            </span>
+
+            <span>
+                PLAN · BUILD · DELIVER
+            </span>
+
+        </footer>
+
+    </div>
+
+    <!-- VALIDATION -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <!-- SUBMIT LOADING -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const form = document.getElementById("csRegisterForm");
+            const button = document.getElementById("csRegisterButton");
+            const text = document.getElementById("csRegisterText");
+
+            if (!form || !button || !text) return;
+
+            form.addEventListener("submit", function () {
+
+                if (window.jQuery &&
+                    window.jQuery.validator &&
+                    !window.jQuery(form).valid()) {
+                    return;
+                }
+
+                button.disabled = true;
+                button.classList.add("is-loading");
+                text.textContent = "Creating workspace...";
+
+            });
+
+        });
+    </script>
+
+<script src="~/js/workspace-ui.js" asp-append-version="true" defer></script>
+</body>
+</html>

@@ -20,7 +20,7 @@ public class JwtTokenService : ITokenService
      string userId,
      string email,
      IEnumerable<string> roles,
-     int? companyId)
+     int? companyId, string? securityStamp = null)
     {
         var key = _configuration["Jwt:Key"]
             ?? throw new InvalidOperationException("JWT key is missing.");
@@ -35,6 +35,7 @@ public class JwtTokenService : ITokenService
         new Claim(ClaimTypes.Name, email)
     };
 
+        claims.Add(new Claim("security_stamp", securityStamp ?? string.Empty));
         claims.AddRange(
             roles.Select(role => new Claim(ClaimTypes.Role, role)));
 

@@ -1,0 +1,13 @@
+@{
+    Layout = "_AdminWorkspaceLayout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/edit-forms.css" asp-append-version="true" />
+}
+<div class="edit-workspace">
+    @RenderBody()
+</div>
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+}

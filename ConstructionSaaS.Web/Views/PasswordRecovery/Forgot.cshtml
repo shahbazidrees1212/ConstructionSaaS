@@ -1,0 +1,6 @@
+@model ConstructionSaaS.Application.DTOs.Auth.ForgotPasswordInput
+@{ Layout = "_RecoveryLayout"; ViewData["Title"] = "Forgot password"; }
+<h1>Forgot your password?</h1><p>Enter your account email to request a secure reset link.</p>
+<div asp-validation-summary="All" class="module-notice error"></div>
+@if(ViewData["RecoverySent"] is string message) { <p class="module-notice success" role="status">@message</p> }
+else { <form method="post" class="module-form"><label>Email address<input asp-for="Email" type="email" autocomplete="email" required maxlength="256" /></label><button class="primary-button">Send reset link</button></form> }

@@ -1,0 +1,8 @@
+@model IEnumerable<ConstructionSaaS.Application.DTOs.ProjectTasks.WorkEntryDto>
+@foreach (var entry in Model) {
+<article class="task-card"><span class="module-pill">@entry.Kind</span><p class="task-description">@entry.Summary</p>
+@if (!string.IsNullOrWhiteSpace(entry.Blockers)) { <p><strong>Blockers:</strong> @entry.Blockers</p> }
+<p class="module-muted">@entry.AuthorEmail · @entry.CreatedAtUtc.ToString("dd MMM yyyy, HH:mm") UTC @if(entry.ReportDate.HasValue) { <span>· Report: @entry.ReportDate.Value.ToString("dd MMM yyyy")</span> }</p>
+@if(entry.FileName != null) { <a class="module-secondary" asp-controller="TaskBoard" asp-action="Evidence" asp-route-id="@entry.Id">Download @entry.FileName</a> }
+</article>
+}

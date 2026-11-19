@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Avoid concurrent IDE builds writing the optional *.dswa.cache.json files.
+         Static assets are still resolved and included normally. -->
+    <StaticWebAssetsCacheDefineStaticWebAssetsEnabled>false</StaticWebAssetsCacheDefineStaticWebAssetsEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConstructionSaaS.Application\ConstructionSaaS.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup><Compile Include="../shared/ProductionHosting.cs" Link="Hosting/ProductionHosting.cs" /></ItemGroup>
+  <ItemGroup><Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" /></ItemGroup>
+</Project>
+

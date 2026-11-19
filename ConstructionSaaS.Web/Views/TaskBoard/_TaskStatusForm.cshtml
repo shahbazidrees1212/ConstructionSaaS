@@ -1,0 +1,19 @@
+@model ConstructionSaaS.Application.DTOs.ProjectTasks.TaskItemDto
+@{ var manager = ViewData["TaskManager"] is true; }
+@if (!manager && Model.Status is "PendingReview" or "Completed") {
+<p class="module-notice">@(Model.Status == "PendingReview" ? "Submitted for manager review. Your work is locked until reviewed." : "Your manager approved this work. This task is complete.")</p>
+} else {
+<form asp-controller="TaskBoard" asp-action="Status" method="post" class="module-form">
+<input type="hidden" name="id" value="@Model.Id" /><input type="hidden" name="projectId" value="@Model.ProjectId" /><input type="hidden" name="ExpectedStatus" value="@Model.Status" />
+<label for="status-@Model.Id">@(manager ? "Review or update status" : "My work status")</label>
+<select name="Status" id="status-@Model.Id">
+<option value="Pending" selected="@(Model.Status == "Pending")">Pending - not started</option>
+<option value="InProgress" selected="@(Model.Status == "InProgress")">In Progress - working / reopen</option>
+<option value="OnHold" selected="@(Model.Status == "OnHold")">On Hold - blocked</option>
+@if(Model.AssignedToUserId != null) { <option value="PendingReview" selected="@(Model.Status == "PendingReview")">Submit for manager review</option> }
+@if(manager && Model.Status == "PendingReview") { <option value="Completed">Approve completion</option> }
+</select>
+<label>Work summary / review reason<textarea name="Note" maxlength="3000" rows="3" placeholder="Describe completed work, the blocker, or why this task needs reopening."></textarea></label>
+<p class="module-muted">A note is required to report a blocker, submit work, or approve/reopen a submission. Add evidence below before submitting.</p>
+<button class="primary-button">@(manager ? "Save review / status" : "Save status")</button></form>
+}

@@ -1,0 +1,169 @@
+@model ConstructionSaaS.Application.DTOs.ProjectTasks.TaskWorkspaceDto
+
+@{
+
+    Layout = "_ManagerModuleLayout";
+
+    var tab = ViewData["Tab"] as string ?? "tasks";
+
+    ViewData["Active"] = tab == "daily" ? "Daily reports" : tab == "notifications" ? "Notifications" : tab == "reports" ? "TaskReports" : tab == "history" ? "TaskHistory" : "Tasks";
+
+    ViewData["Title"] = tab == "daily" ? "Daily reports" : tab == "notifications" ? "Notifications" : tab == "reports" ? "Task progress" : tab == "history" ? "Project audit history" : Model.IsManager ? "Tasks & assignments" : "My tasks";
+
+    var projectId = ViewData["ProjectId"] as int?;
+
+    var status = ViewData["Status"] as string;
+
+    var query = ViewData["Query"] as string ?? "";
+
+    var rows = Model.Tasks.Where(t => (string.IsNullOrEmpty(status) || t.Status == status) && (string.IsNullOrWhiteSpace(query) || t.Title.Contains(query, StringComparison.OrdinalIgnoreCase) || t.ProjectName.Contains(query, StringComparison.OrdinalIgnoreCase))).ToList();
+
+    var statuses = new[] { "Pending", "InProgress", "PendingReview", "Completed", "OnHold" };
+
+    ViewData["TaskManager"] = Model.IsManager;
+
+    var createProjectId = projectId ?? (Model.Projects.Count == 1 ? Model.Projects[0].Id : (int?)null);
+
+    var priorities = new[] { "Low", "Medium", "High", "Critical" };
+
+}
+
+<section class="module-hero"><div><p class="eyebrow">@(Model.IsManager ? "COORDINATE. ASSIGN. DELIVER." : "YOUR WORK ON SITE")</p><h1>@ViewData["Title"]</h1><p>@(Model.IsManager ? "Assign the work and deadline. Your engineer reports progress here; you monitor delivery." : "Start your assigned work, update progress, and submit finished work for manager approval.")</p></div><a class="primary-button" asp-action="Export" asp-route-projectId="@projectId">Export task CSV</a></section>
+
+<section class="module-metrics"><article><span>@(Model.IsManager ? "Project tasks" : "My tasks")</span><strong>@Model.Tasks.Count</strong></article><article><span>Completed</span><strong>@Model.Tasks.Count(t => t.Status == "Completed")</strong></article><article><span>Overdue tasks</span><strong>@Model.Tasks.Count(t => t.IsOverdue)</strong></article><article><span>Overdue milestones</span><strong>@Model.OverdueMilestones</strong></article></section>
+
+@if (tab == "tasks") {
+
+<details class="panel task-workflow">
+
+    <summary class="task-summary">How tasks work — assignment, progress and approval</summary>
+
+    <ol class="task-workflow-steps">
+
+        <li><strong>1. Manager assigns</strong><span>Task instructions, engineer, priority and due date. New tasks start as Pending.</span></li>
+
+        <li><strong>2. Engineer starts</strong><span>Change to In Progress when work begins. Use On Hold if work is blocked, and contact your manager.</span></li>
+
+        <li><strong>3. Submit and review</strong><span>Engineer submits a completion summary. Manager approves completion or reopens with a reason.</span></li>
+
+    </ol>
+
+    <p class="module-muted">Both dashboards show the same task. Refresh to see the latest saved update. Completed means the manager approved the submitted work.</p>
+
+</details>
+
+}
+
+<form method="get" class="project-picker"><input type="hidden" name="tab" value="@tab" /><label for="taskProject">Project</label><select id="taskProject" name="projectId"><option value="">All assigned projects</option>@foreach(var p in Model.Projects) { <option value="@p.Id" selected="@(p.Id == projectId)">@p.Name</option> }</select>@if(tab == "tasks") { <label for="taskStatus">Status</label><select name="status" id="taskStatus"><option value="">All statuses</option>@foreach(var s in statuses) { <option value="@s" selected="@(s == status)">@(s == "InProgress" ? "In Progress" : s == "OnHold" ? "On Hold" : s == "PendingReview" ? "Awaiting review" : s)</option> }</select><label for="taskSearch">Search</label><input id="taskSearch" name="q" value="@query" maxlength="200" placeholder="Task or project name" /> }<button class="module-secondary">Apply filters</button><a class="text-link" asp-action="Index" asp-route-tab="@tab">Reset</a></form>
+
+@if (tab == "notifications") {
+
+<section class="panel notification-center" aria-labelledby="notification-title">
+<div class="module-heading"><div><p class="eyebrow">YOUR INBOX</p><h2 id="notification-title">Notifications</h2></div><a class="module-secondary" asp-action="Index" asp-route-tab="notifications" asp-route-projectId="@projectId">Refresh updates</a></div>
+<p class="module-muted">Latest 100 saved updates, plus current due reminders. Updates appear when you refresh. Reminders remain until work is completed or rescheduled.</p>
+<div class="notification-toolbar"><label>Show <select id="noticeFilter"><option value="all">All updates</option><option value="unread">Unread updates</option><option value="reminder">Due reminders</option><option value="read">Read updates</option></select></label><span class="module-pill">@Model.Notifications.Count(n => n.Id > 0 && !n.IsRead) unread in this view</span></div>
+@foreach(var n in Model.Notifications){
+<article class="task-notice notice-card" data-notice="@(n.Id == 0 ? "reminder" : n.IsRead ? "read" : "unread")"><div><span class="module-pill">@(n.Id == 0 ? "Due reminder" : n.IsRead ? "Read" : "Unread")</span><h3>@n.Message</h3><p class="module-muted">@Model.Projects.FirstOrDefault(p => p.Id == n.ProjectId)?.Name</p><small>@(n.Id == 0 ? "Due" : "Received") <time datetime="@n.CreatedAtUtc.ToString("O")">@n.CreatedAtUtc.ToString("dd MMM yyyy, HH:mm") UTC</time></small></div><div class="module-actions"><a class="module-secondary" asp-action="Index" asp-route-projectId="@n.ProjectId">View project tasks</a>@if(n.Id > 0 && !n.IsRead){<form asp-action="Read" method="post">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@n.Id"/><button class="module-secondary" type="submit">Mark as read</button></form>}</div></article>
+}
+<p id="noticeEmpty" class="module-empty" hidden="@(Model.Notifications.Count > 0)" role="status">You're up to date. No matching notifications.</p>
+</section>
+<script>
+(() => { const filter = document.getElementById('noticeFilter'); const cards = document.querySelectorAll('[data-notice]'); filter.addEventListener('change', () => { let count=0; cards.forEach(card => { card.hidden=filter.value !== 'all' && card.dataset.notice !== filter.value; if(!card.hidden) count++; }); document.getElementById('noticeEmpty').hidden=count>0; }); })();
+</script>
+
+} else if(tab == "daily") {
+
+<partial name="_DailyReports" model="Model" />
+
+} else if(tab == "history") {
+
+<section class="panel"><h2>Who changed what</h2><p class="module-muted">Latest 100 project events. @(Model.IsManager ? "Changes across your currently assigned projects." : "Changes recorded under your current account email.") Earlier records without a project reference remain in the admin audit history.</p>
+
+@if(Model.History.Count == 0) { <p class="module-empty">No recorded changes yet.</p> }
+
+<ol class="module-timeline">@foreach(var a in Model.History) { <li><span class="timeline-dot"></span><div><span class="module-pill">@a.Category</span><h3>@a.Description</h3><p>@a.Actor · @a.OccurredAtUtc.ToString("dd MMM yyyy, HH:mm") UTC</p></div></li> }</ol></section>
+
+} else if(tab == "reports") {
+
+<section class="panel"><h2>Task completion by project</h2><p class="module-muted">Completion is completed tasks divided by total tasks. Milestone progress is reported separately.</p><div class="module-table-wrap"><table><thead><tr><th>Project</th><th>Tasks</th><th>Pending</th><th>In progress</th><th>Awaiting review</th><th>Completed</th><th>Overdue</th><th>Completion</th></tr></thead><tbody>@foreach(var group in Model.Tasks.GroupBy(t => new { t.ProjectId, t.ProjectName })) { var complete = group.Count(t => t.Status == "Completed"); <tr><td>@group.Key.ProjectName</td><td>@group.Count()</td><td>@group.Count(t => t.Status == "Pending")</td><td>@group.Count(t => t.Status == "InProgress")</td><td>@group.Count(t => t.Status == "PendingReview")</td><td>@complete</td><td>@group.Count(t => t.IsOverdue)</td><td>@((100d * complete / group.Count()).ToString("N0"))%</td></tr> }</tbody></table></div>@if(Model.Tasks.Count == 0) { <p class="module-empty">No tasks available for this report.</p> }</section>
+
+} else {
+
+@if (Model.IsManager && Model.Projects.Count > 0) {
+
+<section class="panel"><details open="@(createProjectId.HasValue)"><summary class="task-summary">Create a task</summary><form asp-action="Create" method="post" class="module-form" id="createTask"><div class="form-grid"><label>Project<select name="ProjectId" id="createProject" required><option value="">Choose a project</option>@foreach(var p in Model.Projects) { <option value="@p.Id" selected="@(p.Id == createProjectId)">@p.Name</option> }</select></label><label>Priority<select name="Priority">@foreach(var p in priorities) { <option selected="@(p == "Medium")">@p</option> }</select></label><label>Due date (UTC)<input type="date" name="DueDateUtc" min="2000-01-01" max="2100-12-31" /></label></div><label>Task title<input name="Title" maxlength="200" required placeholder="e.g. Inspect second-floor reinforcement" /></label><label>Description<textarea name="Description" maxlength="2000" rows="3"></textarea></label><label>Assign engineer<select name="AssignedToUserId" id="createEngineer"><option value="">Unassigned — assign later</option>@foreach(var e in Model.Engineers) { <option value="@e.UserId" data-project="@e.ProjectId">@e.Email</option> }</select></label><p id="engineerAvailability" class="module-muted" aria-live="polite"></p><p class="module-muted">Only active engineers assigned to this project can receive tasks. Ask your company admin to add a project member if someone is missing.</p><button class="primary-button">Create task</button></form></details></section>
+
+}
+
+<section class="panel"><div class="module-heading"><h2>@(Model.IsManager ? "Project task board" : "Your assigned work")</h2><span class="module-pill">@rows.Count tasks shown</span></div>
+
+@if(rows.Count == 0) { <div class="module-empty"><h3>No tasks to show</h3><p>@(Model.IsManager ? "Create a task or adjust the filters." : "Your manager's assignments will appear here. Try clearing filters if you expected a task.")</p></div> }
+
+@foreach(var t in rows) {
+
+<article class="task-card"><div class="module-heading"><div><span class="module-muted">@t.ProjectName</span><h2>@t.Title</h2></div><div><span class="module-pill">@t.Priority</span> <span class="module-pill">@(t.Status == "InProgress" ? "In Progress" : t.Status == "PendingReview" ? "Awaiting review" : t.Status == "OnHold" ? "On Hold" : t.Status)</span>@if(t.IsOverdue) { <span class="module-pill danger">Overdue</span> }</div></div><p class="task-description">@t.Description</p><p class="module-muted">Engineer: @(t.AssigneeEmail ?? "Unassigned") · Due: @(t.DueDateUtc?.ToString("dd MMM yyyy") ?? "Not set")</p>
+
+@if(Model.IsManager && t.AssignedToUserId != null && !t.AssigneeEligible) { <p class="module-notice error">Assignee needs review: the engineer is inactive, changed role, or is no longer assigned to this project. Reassign this task.</p> }
+
+@if(Model.IsManager) {
+
+    <p class="module-muted">Monitor the engineer's progress here. Use task history to see who made each update.</p>
+
+    <details class="manager-status-correction"><summary class="task-summary">Review completion / update status</summary>
+
+        <p class="module-muted">Use only to correct an incorrect update or reopen work. The change is recorded in audit history and notifications.</p>
+
+        <partial name="_TaskStatusForm" model="t" />
+
+    </details>
+
+} else {
+
+    <p class="module-muted">@(t.Status == "Completed" ? "Your manager approved this task. Ask them to reopen it if further work is needed." : "Report your work progress below, then select Save status. Your manager will see your update.")</p>
+
+    <partial name="_TaskStatusForm" model="t" />
+
+}
+
+<details><summary class="task-summary">Work notes &amp; evidence</summary>
+
+@if(Model.IsManager || (t.Status != "Completed" && t.Status != "PendingReview")) {
+
+<form asp-action="Work" method="post" enctype="multipart/form-data" class="module-form">
+
+<input type="hidden" name="ProjectId" value="@t.ProjectId" /><input type="hidden" name="TaskId" value="@t.Id" />
+
+<label>Work update<textarea name="Summary" required maxlength="3000" rows="3"></textarea></label>
+
+<label>Blockers / assistance needed<textarea name="Blockers" maxlength="2000" rows="2"></textarea></label>
+
+<label>Optional evidence: PDF, PNG or JPG, up to 10 MB<input name="file" type="file" accept=".pdf,.png,.jpg,.jpeg" /></label>
+
+<button class="module-secondary">Save work update</button></form>
+
+}
+
+<partial name="_WorkEntries" model="Model.WorkEntries.Where(e => e.TaskId == t.Id)" />
+
+</details>
+
+@if(Model.IsManager && t.Status != "PendingReview" && t.Status != "Completed") {
+
+<details><summary class="task-summary">Edit task &amp; assignment</summary><form asp-action="Edit" method="post" class="module-form"><input type="hidden" name="id" value="@t.Id" /><input type="hidden" name="projectId" value="@t.ProjectId" /><input type="hidden" name="Status" value="@t.Status" /><input type="hidden" name="ExpectedStatus" value="@t.Status" /><label>Title<input name="Title" value="@t.Title" maxlength="200" required /></label><label>Description<textarea name="Description" maxlength="2000">@t.Description</textarea></label><div class="form-grid"><label>Engineer<select name="AssignedToUserId"><option value="">Unassigned</option>@foreach(var e in Model.Engineers.Where(e => e.ProjectId == t.ProjectId)) { <option value="@e.UserId" selected="@(e.UserId == t.AssignedToUserId)">@e.Email</option> }</select></label><label>Priority<select name="Priority">@foreach(var p in priorities) { <option selected="@(p == t.Priority)">@p</option> }</select></label><label>Due date<input type="date" name="DueDateUtc" value="@t.DueDateUtc?.ToString("yyyy-MM-dd")" min="2000-01-01" max="2100-12-31" /></label></div><button class="primary-button">Save task</button></form><form asp-action="Delete" method="post" onsubmit="return confirm('Permanently remove this task and all its work notes and evidence? Its audit history will remain.');"><input type="hidden" name="id" value="@t.Id" /><input type="hidden" name="projectId" value="@t.ProjectId" /><button class="module-danger">Remove task</button></form></details>
+
+}</article>
+
+}</section>
+
+}
+
+<script>
+
+(() => { const project = document.getElementById('createProject'); const engineer = document.getElementById('createEngineer'); if (!project || !engineer) return;
+
+function filter() { let available = 0; for (const option of engineer.options) { if (!option.value) continue; option.hidden = option.dataset.project !== project.value; option.disabled = option.hidden; if (!option.hidden) available++; if (option.hidden && option.selected) engineer.value = ''; } const hint = document.getElementById('engineerAvailability'); if (hint) hint.textContent = !project.value ? 'Choose a project to see its engineers.' : available ? available + ' active project engineer(s) available. Select an email below.' : 'No active SiteEngineer is assigned to this project. Ask your company admin to add a project member, or save the task as unassigned.'; }
+
+project.addEventListener('change', filter); filter(); })();
+
+</script>
+

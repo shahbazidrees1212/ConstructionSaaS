@@ -1,0 +1,35 @@
+﻿.assignment-content .page-header { padding: 30px 34px; margin-bottom: 24px; background: #19374b; color: white; border-radius: 18px; }
+.assignment-content .page-header .eyebrow { color: #efc171; }
+.assignment-content h1 { font: 800 clamp(26px, 3vw, 36px) Manrope, sans-serif; margin: 12px 0; letter-spacing: -1px; }
+.assignment-content .subtitle { color: #64748b; font-size: 13px; line-height: 1.8; }
+.assignment-content .page-header .subtitle { color: #c2d1dd; margin: 0; }
+.assignment-content .card { background: white; border: 1px solid #e6e9ed; border-radius: 16px; padding: 24px; margin-bottom: 22px; }
+.assignment-content .card-title { display: flex; align-items: center; gap: 10px; font: 800 16px Manrope, sans-serif; margin: 0 0 22px; }
+.assignment-content .card-title > i { color: #647c91; font-size: 15px; }
+.assignment-content .project-selector { max-width: 620px; }
+.assignment-content label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 9px; }
+.assignment-content .form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: 18px; }
+.assignment-content .form-control { width: 100%; height: 45px; border: 1px solid #dce4ed; border-radius: 9px; background: #fbfcfe; color: #29425b; padding: 0 12px; font: 13px 'DM Sans', sans-serif; }
+.assignment-content .form-control:focus { outline: 2px solid #dca74d; outline-offset: 2px; }
+.assignment-content .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 43px; padding: 12px 16px; border: 0; border-radius: 9px; font-weight: 700; font-size: 12px; }
+.assignment-content .btn-primary { background: #f2b653; color: #182b3d; }
+.assignment-content .btn:disabled { opacity: .55; cursor: not-allowed; }
+.assignment-content .btn-danger { background: #fff0f1; color: #af3243; }
+.assignment-content .table-wrap { overflow: auto; }
+.assignment-content table { width: 100%; min-width: 650px; border-collapse: collapse; text-align: left; }
+.assignment-content th { padding: 15px; background: #f5f7f9; color: #65768b; font-size: 11px; }
+.assignment-content td { padding: 18px 15px; border-bottom: 1px solid #edf1f5; font-size: 12px; }
+.assignment-content .employee-name { font-weight: 700; overflow-wrap: anywhere; }
+.assignment-content .member-state { display: inline-block; margin-top: 8px; font-size: 10px; padding: 4px 8px; border-radius: 5px; }
+.assignment-content .is-active { color: #14704c; background: #e5f5ed; }
+.assignment-content .is-inactive { color: #9b4c17; background: #fff0db; }
+.assignment-content .review-note { display: block; color: #a13b28; font-size: 11px; margin-top: 7px; }
+.assignment-content .role-badge, .assignment-content .count { display: inline-block; background: #eef3fa; color: #3c5d83; padding: 6px 10px; border-radius: 20px; font-size: 11px; }
+.assignment-content .alert { border-radius: 10px; padding: 15px 18px; margin-bottom: 20px; font-size: 13px; }
+.assignment-content .alert-error { background: #fff1f2; color: #ae3044; }
+.assignment-content .alert-success { background: #e9f8ef; color: #17673b; }
+.assignment-content .empty-state { text-align: center; padding: 36px 20px; color: #6b7e92; }
+.assignment-content .empty-state i { font-size: 28px; color: #9eafc0; }
+.availability-note { color: #826126; font-size: 13px; }
+@media(max-width: 1100px) { .assignment-content .form-grid { grid-template-columns: 1fr; } }
+@media(max-width: 600px) { .assignment-content .card { padding: 18px 14px; } .assignment-content .page-header { padding: 24px 20px; } }

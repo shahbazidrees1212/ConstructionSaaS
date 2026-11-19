@@ -1,0 +1,168 @@
+/* Presentation overrides loaded exclusively by the company admin dashboard. */
+.admin-dashboard { --bg: #f5f6f8; --border: #e6e9ed; --sidebar-width: 248px; --radius: 16px; --shadow: 0 3px 16px #17263b04; color: #243247; }
+.admin-dashboard .sidebar { background: #132638; padding: 28px 16px 20px; }
+.admin-dashboard .brand { font-size: 16px; gap: 9px; padding-left: 4px; padding-right: 0; }
+.admin-dashboard .brand-mark { width: 34px; height: 38px; font-size: 21px; flex-shrink: 0; }
+.admin-dashboard .nav-label { font-size: 9px; letter-spacing: 2px; margin-top: 24px; }
+.admin-dashboard .nav-link { min-height: 44px; font-size: 12px; gap: 12px; }
+.admin-dashboard .nav-link.active { background: #f2b653; color: #182b3d; }
+.admin-dashboard .nav-link.active i { color: #182b3d; }
+.admin-dashboard .nav-link.active::before { display: none; }
+.admin-dashboard .help-card { margin: 0 0 22px; padding: 18px; background: #ffffff05; }
+.admin-dashboard .help-card strong { font-size: 14px; line-height: 1.6; display: block; }
+.admin-dashboard .topbar { min-height: 80px; padding: 16px 36px; }
+.admin-dashboard .topbar-right { gap: 16px; }
+.admin-dashboard .search-box { width: 280px; height: 42px; background: #f7f8fa; }
+.admin-dashboard .avatar { background: #eaf0f4; color: #294259; border: 1px solid #dae3ea; }
+.admin-dashboard .content { max-width: 1600px; padding: 30px 36px 20px; }
+.admin-dashboard .welcome { min-height: 266px; padding: 32px 38px; margin-bottom: 30px; background: #183449; border: 1px solid #254258; border-radius: 19px; }
+.admin-dashboard .welcome::after { display: none; }
+.admin-dashboard .welcome .eyebrow { color: #eabb6c; font-size: 10px; }
+.admin-dashboard .welcome h1 { color: #fff; font-size: clamp(30px, 3.2vw, 44px); letter-spacing: -1.6px; line-height: 1.12; }
+.admin-dashboard .welcome-description { color: #c4d1dc; font-size: 13px; margin: 16px 0 22px; }
+.admin-dashboard .primary-button { background: #f2b653; box-shadow: none; border-color: #f2b653; min-height: 43px; }
+.welcome-blueprint { width: 40%; max-width: 370px; color: #87a3b6; padding: 18px; background-image: linear-gradient(#ffffff05 1px, transparent 1px), linear-gradient(90deg, #ffffff05 1px, transparent 1px); background-size: 22px 22px; }
+.welcome-blueprint svg { width: 100%; margin: 12px 0; }
+.blueprint-label { font-size: 9px; letter-spacing: 3px; color: #adc1cf; }
+.welcome-blueprint > span { display: block; text-align: right; font-size: 11px; }
+.overview-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
+.admin-dashboard .overview-heading .eyebrow, .quick-actions .eyebrow { font-size: 9px; color: #6a7888; margin-bottom: 7px; letter-spacing: 1.7px; }
+.overview-heading h2, .quick-actions h2 { font: 800 20px 'Manrope', sans-serif; margin: 0; letter-spacing: -.6px; }
+.overview-heading > span { font-size: 12px; color: #637184; display: flex; align-items: center; gap: 8px; }
+.admin-dashboard .stats-grid { gap: 18px; margin-bottom: 26px; }
+.admin-dashboard .stat-card { position: relative; align-items: flex-start; flex-direction: row-reverse; justify-content: space-between; padding: 23px; min-height: 153px; }
+.admin-dashboard .stat-icon { width: 40px; height: 40px; font-size: 16px; border-radius: 12px; }
+.admin-dashboard .stat-value { font-size: 34px; margin: 12px 0 8px; font-variant-numeric: tabular-nums; }
+.admin-dashboard .stat-caption { color: #657489; }
+.admin-dashboard .stat-name { color: #5b697b; }
+.admin-dashboard .projects-panel, .admin-dashboard .panel { padding: 24px; }
+.admin-dashboard .projects-panel { margin-bottom: 24px; }
+.admin-dashboard .section-heading h2 { font-size: 16px; }
+.admin-dashboard .section-heading h2 i { color: #7b8b9e; font-size: 15px; }
+.admin-dashboard .section-subtitle { color: #68788b; font-size: 12px; margin-top: 8px; }
+.admin-dashboard .projects-table { min-width: 440px; }
+.admin-dashboard .projects-table th { background: #f5f7f9; text-transform: uppercase; font-size: 10px; letter-spacing: .8px; padding: 15px 16px; }
+.admin-dashboard .projects-table td { padding: 19px 16px; font-size: 13px; }
+.admin-dashboard .projects-table td:first-child { width: 70px; color: #788696; font-size: 12px; }
+.admin-dashboard .projects-table th:last-child, .admin-dashboard .projects-table td:last-child { text-align: right; }
+.admin-dashboard .status { gap: 6px; font-size: 11px; }
+.admin-dashboard .status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.admin-dashboard .bottom-grid { gap: 24px; }
+.admin-dashboard .activity-copy > div, .admin-dashboard .schedule-copy span { color: #69798b; font-size: 12px; line-height: 1.7; }
+.admin-dashboard .activity-copy strong, .admin-dashboard .schedule-copy strong { font-size: 13px; }
+.quick-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 30px; }
+.quick-actions > div { grid-column: 1 / -1; margin-bottom: 2px; }
+.quick-actions > a { display: flex; align-items: center; gap: 12px; padding: 20px 16px; border: 1px solid var(--border); background: white; border-radius: 13px; transition: border-color .2s, box-shadow .2s; }
+.quick-actions > a:hover { border-color: #d7b47d; box-shadow: 0 4px 16px #18344909; }
+.shortcut-icon { color: #9c6a26; background: #fbf3e6; width: 36px; height: 40px; display: grid; place-items: center; border-radius: 10px; flex-shrink: 0; }
+.quick-actions strong { display: block; font-size: 12px; }
+.quick-actions small { display: block; font-size: 11px; color: #69798b; line-height: 1.6; margin-top: 4px; }
+.quick-actions > a > i { margin-left: auto; font-size: 11px; color: #83909e; }
+.skip-link { position: fixed; top: -80px; left: 20px; z-index: 200; background: white; padding: 12px 20px; border-radius: 8px; }
+.skip-link:focus { top: 12px; }
+@media (max-width: 1300px) { .admin-dashboard .stat-card { min-height: 140px; } .quick-actions { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .admin-dashboard .content { padding: 24px; } .admin-dashboard .topbar { padding: 16px 24px; } .welcome-blueprint { display: none; } }
+@media (max-width: 768px) {
+    .admin-dashboard { --sidebar-width: 72px; }
+    .admin-dashboard .sidebar { padding: 20px 10px; }
+    .admin-dashboard .brand { padding: 0 0 26px; }
+    .admin-dashboard .nav-link { gap: 0; min-height: 46px; }
+    .admin-dashboard .nav-list + .nav-list { margin-top: 18px; }
+    .admin-dashboard .topbar { flex-wrap: wrap; gap: 12px; }
+    .admin-dashboard .topbar-right { flex: 1; justify-content: flex-end; }
+    .admin-dashboard .search-box { width: min(100%, 220px); }
+    .admin-dashboard .welcome { padding: 28px; min-height: 260px; }
+    .admin-dashboard .stat-card { padding: 18px; }
+    .overview-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
+}
+@media (max-width: 540px) {
+    .admin-dashboard .content { padding: 16px 12px; }
+    .admin-dashboard .topbar { padding: 14px 12px; }
+    .admin-dashboard .topbar-right { flex-basis: 100%; gap: 8px; }
+    .admin-dashboard .search-box { display: flex; width: auto; flex: 1; min-width: 0; }
+    .admin-dashboard .avatar { display: none; }
+    .admin-dashboard .welcome { padding: 24px 20px; }
+    .admin-dashboard .welcome h1 { font-size: 33px; }
+    .desktop-break { display: none; }
+    .admin-dashboard .stats-grid { gap: 12px; }
+    .admin-dashboard .stat-card { min-height: 130px; }
+    .admin-dashboard .panel, .admin-dashboard .projects-panel { padding: 20px 14px; }
+    .admin-dashboard .section-heading { flex-wrap: wrap; }
+    .admin-dashboard .bottom-grid { gap: 16px; }
+    .admin-dashboard .schedule-copy span { line-height: 1.6; }
+}
+
+/* Account controls and project exploration. */
+.admin-dashboard .topbar { position: relative; z-index: 110; }
+.topbar-create { display: inline-flex; align-items: center; gap: 9px; padding: 12px 16px; border: 1px solid #dfe6ec; border-radius: 10px; font-size: 12px; font-weight: 700; background: #fff; }
+.topbar-create:hover { background: #fff7e9; border-color: #e9c68c; }
+.account-menu { position: relative; }
+.account-menu summary { display: flex; align-items: center; gap: 12px; cursor: pointer; list-style: none; padding: 5px; border-radius: 12px; }
+.account-menu summary::-webkit-details-marker { display: none; }
+.account-menu summary > i { font-size: 10px; color: #718194; margin-left: 8px; }
+.account-menu[open] summary { background: #f0f4f8; }
+.account-avatar { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; border-radius: 13px; background: #19394e; color: #f6c773; font-weight: 800; font-size: 14px; }
+.account-label strong, .account-label small { display: block; }
+.account-label strong { font-size: 12px; margin-bottom: 4px; }
+.account-label small { font-size: 10px; color: #697c8f; }
+.account-popover { position: absolute; right: 0; top: calc(100% + 14px); width: min(310px, calc(100vw - 100px)); padding: 10px; border: 1px solid #e1e7ee; border-radius: 16px; background: #fff; box-shadow: 0 18px 55px #122c4524; }
+.account-identity { display: flex; gap: 12px; align-items: center; padding: 10px 6px 18px; margin-bottom: 7px; border-bottom: 1px solid #edf0f4; }
+.account-identity > div { min-width: 0; }
+.account-identity strong { display: block; font-size: 12px; }
+.account-identity div > span { display: block; font-size: 11px; color: #67788c; overflow-wrap: anywhere; line-height: 1.6; margin-top: 4px; }
+.account-popover > a, .account-popover button { display: flex; gap: 12px; width: 100%; align-items: center; padding: 13px 12px; border-radius: 8px; font-size: 12px; border: 0; background: transparent; text-align: left; }
+.account-popover > a:hover { background: #f2f5f9; }
+.account-popover form { margin-top: 6px; border-top: 1px solid #edf0f4; padding-top: 6px; }
+.account-popover button { color: #b03c42; }
+.account-popover button:hover { background: #fff1f2; }
+.account-menu summary:focus-visible { outline: 3px solid #dca23e; outline-offset: 3px; }
+.project-toolbar { display: flex; align-items: center; gap: 14px; padding: 16px 0 0; border-top: 1px solid #edf0f4; }
+.admin-dashboard .project-toolbar .search-box { display: flex; flex: 1; width: auto; max-width: 400px; }
+.project-filter { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #64748b; margin-left: auto; }
+.project-filter select { max-width: 180px; padding: 11px 12px; border: 1px solid #dfe6ee; background: #fff; border-radius: 9px; color: #30465f; font: inherit; }
+.reset-filter { border: 0; background: transparent; color: #356792; font-size: 12px; padding: 12px 6px; }
+.filter-result { font-size: 11px; color: #6e7d8e; margin: 12px 0 16px; }
+.project-name-link { color: #203b55; font-weight: 700; }
+.project-name-link i { margin-left: 10px; color: #71879b; font-size: 10px; }
+.project-name-link:hover { color: #2266ad; text-decoration: underline; }
+.insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.insight-symbol { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: #eef4f8; color: #40617a; }
+.portfolio-panel .eyebrow { font-size: 9px; color: #718298; }
+.portfolio-total { display: flex; align-items: baseline; gap: 12px; margin: 22px 0; }
+.portfolio-total > strong { font: 800 44px Manrope, sans-serif; letter-spacing: -2px; }
+.portfolio-total > span { font-size: 12px; color: #697b8e; }
+.distribution-list { display: grid; gap: 16px; }
+.distribution-item > div { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; margin-bottom: 8px; }
+.distribution-item small { color: #738194; font-weight: 400; margin-left: 4px; }
+.distribution-item meter { display: block; width: 100%; height: 10px; background: #eef2f6; border: 0; border-radius: 10px; }
+.distribution-item meter::-webkit-meter-bar { background: #eef2f6; border: 0; border-radius: 10px; }
+.distribution-item meter::-webkit-meter-optimum-value { background: #dca74d; border-radius: 10px; }
+.distribution-item meter::-moz-meter-bar { background: #dca74d; border-radius: 10px; }
+.insight-empty { color: #718194; font-size: 13px; line-height: 1.8; padding: 20px 0; }
+.next-step-panel { border-radius: 16px; background: #19374b; padding: 28px; color: #fff; }
+.next-step-panel .eyebrow { color: #eec47e; font-size: 9px; }
+.next-step-panel h2 { font: 800 24px Manrope, sans-serif; letter-spacing: -.7px; margin: 12px 0; }
+.next-step-panel > p:not(.eyebrow) { color: #bbccd9; font-size: 12px; line-height: 1.7; margin-bottom: 22px; }
+.next-step-panel > a { display: flex; align-items: center; gap: 14px; padding: 16px 0; border-top: 1px solid #ffffff1a; }
+.step-number { font-size: 10px; color: #eec47e; font-weight: 700; }
+.next-step-panel strong { display: block; font-size: 12px; }
+.next-step-panel small { display: block; color: #bbccd9; font-size: 11px; margin-top: 5px; line-height: 1.6; }
+.next-step-panel a > i { margin-left: auto; color: #eec47e; font-size: 12px; }
+.next-step-panel a:hover strong { color: #f6c773; }
+@media (max-width: 1050px) { .insight-grid { grid-template-columns: 1fr; } .project-toolbar { flex-wrap: wrap; } }
+@media (max-width: 600px) {
+    .account-label { display: none; }
+    .admin-dashboard .topbar-right { flex-basis: auto; }
+    .topbar-create { padding: 10px; font-size: 11px; }
+    .project-toolbar { gap: 10px; }
+    .admin-dashboard .project-toolbar .search-box { flex-basis: 100%; max-width: none; }
+    .project-filter { margin-left: 0; flex: 1; }
+    .project-filter select { min-width: 0; width: 100%; }
+    .portfolio-total { flex-wrap: wrap; gap: 4px 12px; }
+    .next-step-panel { padding: 22px; }
+}
+
+.operational-strip { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-bottom:24px; }
+.operational-strip a { display:block; padding:22px; background:#edf2f6; border:1px solid #e0e7ed; border-radius:14px; }
+.operational-strip span,.operational-strip small { display:block; color:#5d7287; font-size:12px; }.operational-strip strong { display:block; margin:12px 0; font:800 28px Manrope,sans-serif; }.operational-strip small { font-size:11px; }.operational-strip a:hover { border-color:#dca74d; }.dashboard-activity { margin-top:24px; }
+@media(max-width:700px) { .operational-strip { grid-template-columns:1fr; gap:12px; } }

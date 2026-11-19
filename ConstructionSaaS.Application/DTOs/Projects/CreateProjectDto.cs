@@ -2,11 +2,8 @@
 
 namespace ConstructionSaaS.Application.DTOs.Projects;
 
-public class CreateProjectDto
+public class CreateProjectDto : IValidatableObject
 {
-    [Range(1, int.MaxValue)]
-    public int CompanyId { get; set; }
-
     [Required]
     [StringLength(50)]
     public string ProjectCode { get; set; } = string.Empty;
@@ -39,9 +36,21 @@ public class CreateProjectDto
 
     [Required]
     [StringLength(3, MinimumLength = 3)]
-    [RegularExpression("^[A-Z]{3}$")]
+    [RegularExpression("^[A-Za-z]{3}$", ErrorMessage = "Currency code must be three letters.")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     public DateTime? PlannedStartDateUtc { get; set; }
     public DateTime? PlannedEndDateUtc { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (PlannedStartDateUtc.HasValue &&
+            PlannedEndDateUtc.HasValue &&
+            PlannedEndDateUtc < PlannedStartDateUtc)
+        {
+            yield return new ValidationResult(
+                "Planned end date must be on or after the start date.",
+                new[] { nameof(PlannedEndDateUtc) });
+        }
+    }
 }

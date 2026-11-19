@@ -1,0 +1,11 @@
+<details class="live-notifications" id="liveNotifications" data-stream-url="@Url.Action("Stream", "Notifications")" data-inbox-url="@Url.Action("Inbox", "Notifications")" data-read-url="@Url.Action("Read", "Notifications")" data-read-all-url="@Url.Action("ReadAll", "Notifications")">
+    <summary aria-label="Notifications" aria-controls="liveNoticePanel"><i class="fa-regular fa-bell" aria-hidden="true"></i><b id="liveNoticeCount" hidden>0</b></summary>
+    <section id="liveNoticePanel" aria-label="Notification inbox">
+        <header><div><strong>Notifications</strong><small id="liveNoticeConnection" role="status">Connecting&hellip;</small></div><button id="liveNoticeReadAll" type="button" disabled>Mark all read</button></header>
+        <div id="liveNoticeItems" aria-busy="true"><p>Loading your updates&hellip;</p></div>
+        <form id="liveNoticeToken" hidden>@Html.AntiForgeryToken()</form>
+        <footer><span>Latest 20 updates &middot; unread first</span><p id="liveNoticeFeedback" role="status"></p></footer>
+    </section>
+</details>
+<link rel="stylesheet" href="~/css/live-notifications.css" asp-append-version="true" />
+<script src="~/js/live-notifications.js" asp-append-version="true" defer></script>

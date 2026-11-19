@@ -1,0 +1,8 @@
+@model int
+@{ Layout = "_RecoveryLayout";
+   ViewData["Title"] = Model == 404 ? "Page not found" : Model == 403 ? "Access restricted" : "Request unavailable";
+}
+<p class="eyebrow">REQUEST @Model</p>
+<h1>@ViewData["Title"]</h1>
+<p>@(Model == 404 ? "This page may have moved, or the item is no longer available." : Model == 403 ? "Your account does not have permission to open this page. Ask your company administrator if you need access." : Model == 429 ? "Too many attempts. Please wait a minute before trying again." : "We could not complete this request. Please return to your workspace and try again.")</p>
+<a class="primary-button" asp-controller="Account" asp-action="Login">Return to sign in</a>

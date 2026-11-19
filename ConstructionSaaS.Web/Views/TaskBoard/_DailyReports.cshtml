@@ -1,0 +1,17 @@
+@model ConstructionSaaS.Application.DTOs.ProjectTasks.TaskWorkspaceDto
+<section class="panel"><h2>Daily site report</h2><p class="module-muted">Record site work and blockers. One report per person, project and date. Submitted reports remain in history.</p>
+@if(Model.Projects.Count > 0) {
+<form asp-action="Work" method="post" enctype="multipart/form-data" class="module-form">
+<label>Project<select name="ProjectId" required>@foreach(var p in Model.Projects) { <option value="@p.Id">@p.Name</option> }</select></label>
+<label>Report date (UTC)<input type="date" name="ReportDate" required min="2000-01-01" max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" value="@DateTime.UtcNow.ToString("yyyy-MM-dd")" /></label>
+<label>Work completed / site progress<textarea name="Summary" required maxlength="3000" rows="4"></textarea></label>
+<label>Blockers or assistance needed<textarea name="Blockers" maxlength="2000" rows="2"></textarea></label>
+<label>Optional photo or PDF (up to 10 MB)<input type="file" name="file" accept=".pdf,.png,.jpg,.jpeg" /></label>
+<button class="primary-button">Submit daily report</button></form>
+} else { <p>No assigned projects available.</p> }</section>
+<section class="panel"><h2>Site report history</h2><p class="module-muted">Latest accessible work entries. Engineers see their own daily reports; managers see their assigned projects.</p>
+@foreach(var group in Model.WorkEntries.Where(e => e.TaskId == null).GroupBy(e => e.ProjectId)) {
+<h3>@Model.Projects.FirstOrDefault(p => p.Id == group.Key)?.Name</h3><partial name="_WorkEntries" model="group.AsEnumerable()" />
+}
+@if(!Model.WorkEntries.Any(e => e.TaskId == null)) { <p class="module-empty">No daily reports yet.</p> }
+</section>

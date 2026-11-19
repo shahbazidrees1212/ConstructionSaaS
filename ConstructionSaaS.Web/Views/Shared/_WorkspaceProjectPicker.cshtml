@@ -1,0 +1,7 @@
+@model ConstructionSaaS.Web.Models.AdminWorkspaceViewModel
+<form method="get" class="project-picker">
+    <label for="projectId">Project</label>
+    <select id="projectId" name="projectId" required>
+    @foreach (var p in Model.Report.Projects) { <option value="@p.Id" selected="@(p.Id == Model.ProjectId)">@p.Code &mdash; @p.Name</option> }
+    </select><button class="module-secondary" type="submit">View project</button>
+</form>

@@ -1,0 +1,128 @@
+@using System.IdentityModel.Tokens.Jwt
+
+@using System.Security.Claims
+
+@{
+
+    var active = ViewData["Active"] as string ?? "Dashboard";
+
+    var email = "";
+
+    var token = Context.Session.GetString("JwtToken");
+
+    try {
+
+        var handler = new JwtSecurityTokenHandler();
+
+        if (!string.IsNullOrEmpty(token) && handler.CanReadToken(token))
+
+            email = handler.ReadJwtToken(token).Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email || c.Type == "email")?.Value ?? "";
+
+    } catch (ArgumentException) { }
+
+    var isEngineer = false;
+
+    if (!string.IsNullOrEmpty(token)) {
+
+        var claims = new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
+
+        isEngineer = claims.Any(c => (c.Type == ClaimTypes.Role || c.Type == "role" || c.Type == "roles") && c.Value == "SiteEngineer")
+
+            && !claims.Any(c => (c.Type == ClaimTypes.Role || c.Type == "role" || c.Type == "roles") && c.Value == "ProjectManager");
+
+    }
+
+    var initials = string.IsNullOrWhiteSpace(email) ? "PM" : email[..1].ToUpperInvariant();
+
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] | ConstructionSaaS</title>
+
+    <link rel="stylesheet" href="~/css/manager-projects.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/manager-workspace.css" asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+
+<link rel="stylesheet" href="~/css/workspace-polish.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/workspace-refinement.css" asp-append-version="true" />
+
+<link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/clarity-manager.css" asp-append-version="true" /></head>
+
+<body class="clarity-manager">
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <aside class="manager-sidebar">
+
+        <a class="manager-brand" asp-controller="@(isEngineer ? "EngineerDashboard" : "ManagerDashboard")" asp-action="Index"><span>C</span>Construction<strong>SaaS</strong></a>
+
+        <p class="nav-caption">PROJECT WORKSPACE</p>
+
+        <nav aria-label="Workspace navigation">
+
+            @if (!isEngineer) {
+
+            <a class="@(active == "Dashboard" ? "selected" : "")" aria-current="@(active == "Dashboard" ? "page" : null)" asp-controller="ManagerDashboard" asp-action="Index"><span aria-hidden="true">&#9672;</span> Overview</a>
+
+            <a class="@(active == "Projects" ? "selected" : "")" aria-current="@(active == "Projects" ? "page" : null)" asp-controller="ManagerProjects" asp-action="Index"><span aria-hidden="true">&#9636;</span> My projects</a>
+
+            @foreach (var item in new[] { ("Schedule", "Schedule & milestones"), ("Documents", "Documents"), ("Reports", "Reports"), ("Activity", "My activity"), ("Settings", "Profile & security") })
+
+            {
+
+                <a class="@(active == item.Item1 ? "selected" : "")" aria-current="@(active == item.Item1 ? "page" : null)" asp-controller="ManagerWorkspace" asp-action="@item.Item1"><span aria-hidden="true">&#8226;</span> @item.Item2</a>
+
+            }
+
+            }
+
+            <a class="@(active == "Tasks" ? "selected" : "")" asp-controller="TaskBoard" asp-action="Index">@(isEngineer ? "My tasks" : "Tasks & assignments")</a>
+
+            <a class="@(active == "Daily reports" ? "selected" : "")" asp-controller="TaskBoard" asp-action="Index" asp-route-tab="daily">Daily site reports</a>
+
+            <a class="@(active == "Notifications" ? "selected" : "")" asp-controller="TaskBoard" asp-action="Index" asp-route-tab="notifications">Notifications</a>
+
+            <a class="@(active == "TaskReports" ? "selected" : "")" asp-controller="TaskBoard" asp-action="Index" asp-route-tab="reports">@(isEngineer ? "My progress" : "Task progress reports")</a>
+
+            <a class="@(active == "TaskHistory" ? "selected" : "")" asp-controller="TaskBoard" asp-action="Index" asp-route-tab="history">@(isEngineer ? "My update history" : "Project audit history")</a>
+
+            @if (isEngineer) { <a class="@(active == "Settings" ? "selected" : "")" asp-controller="EngineerWorkspace" asp-action="Settings">Profile &amp; security</a> }
+
+            <a class="@(active == "Subscription" ? "selected" : "")" asp-controller="Subscription" asp-action="Index">Company subscription</a>
+        </nav>
+
+        <div class="manager-account"><span class="account-icon">@initials</span><div><strong>@(isEngineer ? "Site Engineer" : "Project Manager")</strong><small>@email</small></div></div>
+
+        <form asp-controller="Account" asp-action="Logout" method="post"><button class="signout" type="submit">Sign out →</button></form>
+
+    </aside>
+
+    <div class="manager-main">
+
+        <header class="manager-topbar"><span>Workspace <span class="breadcrumb-divider">/</span> <strong>@ViewData["Title"]</strong></span><a class="profile-link" asp-controller="@(isEngineer ? "EngineerWorkspace" : "ManagerWorkspace")" asp-action="Settings" title="@email"><span class="account-icon">@initials</span><span>My profile</span></a></header>
+
+        <main id="main" tabindex="-1">@RenderBody()</main>
+
+        <footer class="manager-footer"><span>© @DateTime.Now.Year ConstructionSaaS</span><span>Plan. Build. Deliver.</span></footer>
+
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+<script src="~/js/workspace-ui.js" asp-append-version="true" defer></script>
+
+<partial name="_LiveNotifications" />
+</body>
+
+</html>
+

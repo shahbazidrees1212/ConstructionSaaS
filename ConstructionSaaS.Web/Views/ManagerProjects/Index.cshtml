@@ -1,0 +1,199 @@
+@model ConstructionSaaS.Web.Models.ManagerProjectsViewModel
+
+@{
+    Layout = "_ManagerLayout"; ViewData["Active"] = "Projects"; ViewData["Title"] = "My Projects";
+}
+
+
+
+<div class="mp-page">
+
+    <div class="mp-header">
+        <h1>My Assigned Projects</h1>
+        <p>
+            View and manage your assigned construction projects.
+        </p>
+    </div>
+
+    <div class="mp-stats">
+
+        <div class="mp-stat">
+            <span>Assigned Projects</span>
+            <h3>@(Model.ProjectsLoaded ? Model.TotalProjects.ToString() : "—")</h3>
+        </div>
+
+        <div class="mp-stat">
+            <span>Active Projects</span>
+            <h3>@(Model.ProjectsLoaded ? Model.ActiveProjects.ToString() : "—")</h3>
+        </div>
+
+        <div class="mp-stat">
+            <span>Completed Projects</span>
+            <h3>@(Model.ProjectsLoaded ? Model.CompletedProjects.ToString() : "—")</h3>
+        </div>
+
+    </div>
+
+    <div class="mp-panel">
+
+        <h4 style="margin-bottom:20px;">
+            Project List
+        </h4>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @Model.ErrorMessage
+            </div>
+        }
+
+        <div class="mp-toolbar">
+
+            <input type="search"
+                   id="projectSearch"
+                   placeholder="Search by project name or code..."
+                   aria-label="Search projects" />
+
+            <select id="statusFilter"
+                    aria-label="Filter by status">
+                <option value="">All Statuses</option>
+                <option value="Planning">Planning</option>
+                <option value="Active">Active</option>
+                <option value="OnHold">On Hold</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+
+        </div>
+
+        <div class="table-scroll"><table class="mp-table">
+            <thead>
+                <tr>
+                    <th>Project Code</th>
+                    <th>Project Name</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="projectTableBody">
+
+                @foreach (var project in Model.Projects)
+                {
+                    <tr class="project-row"
+                        data-name="@project.Name"
+                        data-code="@project.ProjectCode"
+                        data-status="@project.Status">
+
+                        <td>@project.ProjectCode</td>
+
+                        <td>
+                            <strong>@project.Name</strong>
+                        </td>
+
+                        <td>
+                            @project.City, @project.Country
+                        </td>
+
+                        <td>
+                            <span class="mp-badge" data-status="@project.Status">
+                                @project.Status
+                            </span>
+                        </td>
+
+                        <td>
+                            <a class="mp-btn"
+                               asp-controller="ManagerProjects"
+                               asp-action="Details"
+                               asp-route-id="@project.Id">
+                                View Details
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+        </table></div>
+
+        <div id="noProjects"
+             class="mp-empty"
+             style="display:none;">
+            No matching projects found.
+        </div>
+
+        @if (Model.ProjectsLoaded && Model.Projects.Count == 0)
+        {
+            <div class="mp-empty">
+                No projects have been assigned to you yet.
+            </div>
+        }
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput =
+            document.getElementById("projectSearch");
+
+        const statusFilter =
+            document.getElementById("statusFilter");
+
+        const rows =
+            document.querySelectorAll(".project-row");
+
+        const emptyMessage =
+            document.getElementById("noProjects");
+
+        function filterProjects() {
+
+            const search =
+                searchInput.value.trim().toLowerCase();
+
+            const status = statusFilter.value;
+
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+
+                const name =
+                    (row.dataset.name || "").toLowerCase();
+
+                const code =
+                    (row.dataset.code || "").toLowerCase();
+
+                const rowStatus =
+                    row.dataset.status || "";
+
+                const matchesSearch =
+                    name.includes(search) ||
+                    code.includes(search);
+
+                const matchesStatus =
+                    status === "" || rowStatus === status;
+
+                const show =
+                    matchesSearch && matchesStatus;
+
+                row.style.display = show ? "" : "none";
+
+                if (show) visibleCount++;
+            });
+
+            emptyMessage.style.display =
+                rows.length > 0 && visibleCount === 0
+                    ? "block"
+                    : "none";
+        }
+
+        searchInput.addEventListener(
+            "input", filterProjects);
+
+        statusFilter.addEventListener(
+            "change", filterProjects);
+
+    });
+</script>

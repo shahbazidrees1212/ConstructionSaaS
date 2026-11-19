@@ -1,0 +1,16 @@
+@model InvoicePaymentViewModel
+@{ Layout = null; var invoice = Model.Invoice; }
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="referrer" content="no-referrer" /><meta name="robots" content="noindex, nofollow" /><title>Invoice @invoice.Number | @invoice.CompanyName</title><link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/workspace-polish.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/workspace-refinement.css" asp-append-version="true" /></head>
+<body class="payment-page"><main class="payment-container"><header class="payment-brand"><strong>@invoice.CompanyName</strong><span>Project invoice</span></header>
+<partial name="_WorkspaceNotices" />
+<section class="module-hero"><div><p class="eyebrow">INVOICE @invoice.Number</p><h1>@invoice.Currency @invoice.Total.ToString("N2")</h1><p>For @invoice.ClientName · Due @invoice.DueDateUtc.ToString("dd MMM yyyy")</p></div><span class="module-pill">@(invoice.IsOverdue ? "Overdue" : invoice.Status)</span></section>
+<section class="panel"><h2>@invoice.ProjectName</h2><partial name="_InvoiceLines" model="invoice" />
+@if(invoice.IsSandbox) { <p class="payment-test">Test payment — no real funds will be collected. Use provider sandbox/test credentials only.</p> }
+@if(invoice.Status == "Open") {
+<p>Continue to @invoice.Provider to pay securely. If you have just returned from checkout, select “Confirm payment” to verify its status.</p>
+<div class="billing-actions"><form asp-action="Begin" method="post"><input type="hidden" name="link" value="@Model.Link" /><button class="primary-button">Pay with @invoice.Provider</button></form><form asp-action="Confirm" method="post"><input type="hidden" name="link" value="@Model.Link" /><button class="secondary-button">Confirm payment</button></form></div>
+} else if(invoice.Status == "Paid") { <h2>Payment received</h2><p>Thank you. Your payment was confirmed on @invoice.PaidAtUtc?.ToString("dd MMM yyyy, HH:mm") UTC.</p><p class="payment-reference">Reference: @invoice.PaymentReference</p> }
+else { <p>This invoice is @invoice.Status.ToLowerInvariant(). Contact @invoice.CompanyName if you need help. Do not submit another payment for the same invoice.</p> }
+<p class="module-muted">Payment details are handled by @invoice.Provider. This page never asks for your card number or account password.</p>
+<button type="button" class="secondary-button" data-print-invoice>Print invoice / save PDF</button>
+</section><footer>Powered by ConstructionSaaS</footer></main><script src="~/js/billing.js" asp-append-version="true" defer></script></body></html>

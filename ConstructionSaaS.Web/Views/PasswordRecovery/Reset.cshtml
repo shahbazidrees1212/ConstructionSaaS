@@ -1,0 +1,6 @@
+@model ConstructionSaaS.Application.DTOs.Auth.ResetPasswordInput
+@{ Layout = "_RecoveryLayout"; ViewData["Title"] = "Reset password"; }
+<h1>Choose a new password</h1><p>Use at least 8 characters with uppercase, lowercase, a number and a symbol.</p>
+<div asp-validation-summary="All" class="module-notice error"></div>
+@if(string.IsNullOrWhiteSpace(Model.Token)) { <p>This reset link is incomplete.</p><a asp-action="Forgot">Request a new link</a> }
+else { <form method="post" class="module-form" asp-action="Reset"><input asp-for="Token" type="hidden" /><label>Account email<input asp-for="Email" type="email" autocomplete="email" required /></label><label>New password<input asp-for="NewPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required /></label><label>Confirm password<input asp-for="ConfirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required /></label><button class="primary-button">Reset password</button></form> }

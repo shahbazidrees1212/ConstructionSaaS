@@ -1,0 +1,207 @@
+@model ConstructionSaaS.Web.Models.ProjectAssignmentsViewModel
+@{
+    Layout = "_AssignmentsLayout";
+    ViewData["Active"] = "ProjectAssignments";
+    ViewData["Title"] = "Project Assignments";
+    var selectedProject = Model.Projects
+        .FirstOrDefault(p => p.Id == Model.ProjectId);
+    var availableMembers = Model.Members
+        .Where(m => m.IsActive && (m.Role == "ProjectManager" || m.Role == "SiteEngineer") && !Model.Assignments.Any(a => a.UserId == m.Id))
+        .ToList();
+}
+            <div class="page-header"><p class="eyebrow">PEOPLE &amp; PROJECTS</p>
+                <div>
+                    <h1>The right people. The right project.</h1>
+                    <p class="subtitle">
+                        Assign project managers and site engineers
+                        to construction projects.
+                    </p>
+                </div>
+            </div>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success" role="status">
+                    <i class="fa-solid fa-circle-check"></i>
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-error" role="alert">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-error" role="alert">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+            <!-- PROJECT SELECTION -->
+            <section class="card">
+                <h2 class="card-title">
+                    <i class="fa-solid fa-folder-open"></i>
+                    Select Project
+                </h2>
+                <form asp-controller="ProjectAssignments"
+                      asp-action="Index"
+                      method="get">
+                    <div class="project-selector">
+                        <label for="projectId">
+                            Current Project
+                        </label>
+                        <select id="projectId"
+                                name="projectId"
+                                class="form-control"
+                                onchange="this.form.submit()">
+                            @foreach (var project in Model.Projects)
+                            {
+                                if (project.Id == Model.ProjectId)
+                                {
+                                    <option value="@project.Id" selected>
+                                        @project.ProjectCode - @project.Name
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@project.Id">
+                                        @project.ProjectCode - @project.Name
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </form>
+            </section>
+<div class="assignment-columns">
+            <!-- ASSIGNED MEMBERS -->
+            <section class="card">
+                <h2 class="card-title">
+                    <i class="fa-solid fa-users"></i>
+                    Assigned Members
+                    <span class="count">
+                        @Model.Assignments.Count
+                    </span>
+                </h2>
+                @if (Model.Assignments.Count == 0)
+                {
+                    <div class="empty-state">
+                        <i class="fa-solid fa-user-group"></i>
+                        <p>No employees assigned to this project yet.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Role</th>
+                                    <th>Assigned Date (UTC)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var assignment in Model.Assignments)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="employee-name">
+                                                @(string.IsNullOrWhiteSpace(assignment.Email) ? "Employee unavailable" : assignment.Email)
+                                            </div>
+                                            <span class="member-state @(assignment.IsActive ? "is-active" : "is-inactive")">@(assignment.IsActive ? "Active" : "Inactive / unavailable")</span>
+@if (assignment.RequiresReview) { <span class="review-note">Needs review &mdash; remove or reassign this member.</span> }
+                                        </td>
+                                        <td>
+                                            <span class="role-badge">
+                                                @(string.IsNullOrWhiteSpace(assignment.Role) ? "No eligible role" : assignment.Role.Replace("ProjectManager", "Project Manager").Replace("SiteEngineer", "Site Engineer"))
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @assignment.AssignedAtUtc.ToString("dd MMM yyyy, HH:mm")
+                                        </td>
+                                        <td>
+                                            <form asp-controller="ProjectAssignments"
+                                                  asp-action="Remove"
+                                                  method="post"
+                                                  onsubmit="return confirm('Remove this assignment?');">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@assignment.Id" />
+                                                <input type="hidden"
+                                                       name="projectId"
+                                                       value="@Model.ProjectId" />
+                                                <button type="submit"
+                                                        class="btn btn-danger">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </section>
+            <!-- ASSIGN MEMBER -->
+            <section class="card assignment-form">
+                <h2 class="card-title">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Assign Team Member
+                </h2>
+                <form asp-controller="ProjectAssignments"
+                      asp-action="Assign"
+                      method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden"
+                           name="ProjectId"
+                           value="@Model.ProjectId" />
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="selectedProjectName">Project</label>
+                            <input id="selectedProjectName" class="form-control"
+                                   value="@(selectedProject?.Name ?? "No project selected")"
+                                   readonly />
+                        </div>
+                        <div class="field">
+                            <label for="UserId">
+                                Team Member
+                            </label>
+                            <select name="UserId"
+                                    id="UserId"
+                                    class="form-control"
+                                    required>
+                                <option value="">
+                                    Select an employee
+                                </option>
+                                @foreach (var member in availableMembers)
+                                {
+                                    <option value="@member.Id">
+                                        @member.Email (@member.Role)
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit"
+                                class="btn btn-primary"
+                                disabled="@(selectedProject == null || availableMembers.Count == 0 || ViewBag.ErrorMessage != null)" aria-describedby="@(Model.ProjectId > 0 && availableMembers.Count == 0 ? "assignmentAvailability" : null)">
+                            <i class="fa-solid fa-user-plus"></i>
+                            Assign Member
+                        </button>
+                    </div>
+                </form>
+                @if (Model.ProjectId > 0 && availableMembers.Count == 0)
+                {
+                    <p class="subtitle" id="assignmentAvailability" style="margin-top:16px">
+                        All eligible active members are already assigned, or no active members are available. Add or activate a team member to assign someone else.
+                    </p>
+                }
+            </section>
+@if (selectedProject == null) { <p class="availability-note">Create or select a project before assigning a member.</p> }
+
+</div>

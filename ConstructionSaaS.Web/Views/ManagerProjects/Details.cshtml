@@ -1,0 +1,219 @@
+@model ConstructionSaaS.Application.DTOs.Projects.ProjectDto
+
+@{
+    Layout = "_ManagerLayout"; ViewData["Active"] = "Projects"; ViewData["Title"] = "Project Details";
+
+    var status = Model.Status ?? "Unknown";
+
+    var statusClass = status switch
+    {
+        "Active" => "active",
+        "Completed" => "completed",
+        "Planning" => "planning",
+        "OnHold" => "onhold",
+        "Cancelled" => "cancelled",
+        _ => "planning"
+    };
+}
+
+
+
+<div class="details-page">
+    <div class="details-container">
+
+        <a asp-controller="ManagerProjects"
+           asp-action="Index"
+           class="details-back">
+            ← Back to My Projects
+        </a>
+
+        <div class="details-header">
+
+            <div class="details-code">
+                @Model.ProjectCode
+            </div>
+
+            <h1>@Model.Name</h1>
+
+            <p>
+                @Model.City, @Model.Country
+            </p>
+
+        </div>
+
+        <nav class="manager-shortcuts" aria-label="Project tools">
+    <a asp-controller="TaskBoard" asp-action="Index" asp-route-projectId="@Model.Id">Tasks &amp; assignments &rarr;<small>Assign engineers and track progress</small></a>
+    <a asp-controller="ManagerWorkspace" asp-action="Schedule" asp-route-projectId="@Model.Id">Milestones &rarr;<small>Manage delivery checkpoints</small></a>
+    <a asp-controller="ManagerWorkspace" asp-action="Documents" asp-route-projectId="@Model.Id">Documents &rarr;<small>Files for this project</small></a>
+</nav>
+<div class="details-grid">
+
+            <!-- PROJECT INFORMATION -->
+            <div class="details-card">
+
+                <h4>Project Information</h4>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Project Code
+                    </span>
+                    <span class="details-value">
+                        @Model.ProjectCode
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Project Name
+                    </span>
+                    <span class="details-value">
+                        @Model.Name
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Current Status
+                    </span>
+                    <span class="status-badge @statusClass">
+                        @status
+                    </span>
+                </div>
+
+                
+
+            </div>
+
+            <!-- LOCATION -->
+            <div class="details-card">
+
+                <h4>Project Location</h4>
+
+                <div class="details-field">
+                    <span class="details-label">Address</span>
+                    <span class="details-value">
+                        @(Model.AddressLine1 ?? "Not provided")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">City</span>
+                    <span class="details-value">
+                        @(Model.City ?? "Not provided")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">State / Province</span>
+                    <span class="details-value">
+                        @(Model.StateOrProvince ?? "Not provided")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">Country</span>
+                    <span class="details-value">
+                        @Model.Country
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">Postal Code</span>
+                    <span class="details-value">
+                        @(Model.PostalCode ?? "Not provided")
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- BUDGET -->
+            <div class="details-card">
+
+                <h4>Project Budget</h4>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Estimated Budget
+                    </span>
+                    <span class="details-value">
+                        @(Model.Budget.HasValue
+                                                ? Model.Budget.Value.ToString("N2")
+                                                : "Not provided")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Currency
+                    </span>
+                    <span class="details-value">
+                        @Model.CurrencyCode
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- PROJECT TIMELINE -->
+            <div class="details-card">
+
+                <h4>Project Timeline</h4>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Planned Start Date
+                    </span>
+                    <span class="details-value">
+                        @(Model.PlannedStartDateUtc?.ToString("dd MMM yyyy")
+                                                ?? "Not scheduled")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Planned End Date
+                    </span>
+                    <span class="details-value">
+                        @(Model.PlannedEndDateUtc?.ToString("dd MMM yyyy")
+                                                ?? "Not scheduled")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Actual Start Date
+                    </span>
+                    <span class="details-value">
+                        @(Model.ActualStartDateUtc?.ToString("dd MMM yyyy")
+                                                ?? "Not started")
+                    </span>
+                </div>
+
+                <div class="details-field">
+                    <span class="details-label">
+                        Actual End Date
+                    </span>
+                    <span class="details-value">
+                        @(Model.ActualEndDateUtc?.ToString("dd MMM yyyy")
+                                                ?? "Not completed")
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="details-description">
+
+            <h4>Project Description</h4>
+
+            <p>
+                @(string.IsNullOrWhiteSpace(Model.Description)
+                                ? "No description has been provided."
+                                : Model.Description)
+            </p>
+
+        </div>
+
+    </div>
+</div>

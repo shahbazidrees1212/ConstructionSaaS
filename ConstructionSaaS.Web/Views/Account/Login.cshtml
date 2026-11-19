@@ -1,0 +1,85 @@
+@model ConstructionSaaS.Web.Models.LoginViewModel
+@{ Layout = null; ViewData["Title"] = "Sign In | ConstructionSaaS"; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101b20" />
+    <title>@ViewData["Title"]</title>
+    
+    
+    
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="@Url.Content("~/css/site.css")" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/workspace-polish.css" asp-append-version="true" /><link rel="stylesheet" href="~/css/workspace-refinement.css" asp-append-version="true" />
+</head>
+<body class="cs-login">
+<div class="cs-auth-scene">
+    <video class="cs-scene-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+        <source src="@Url.Content("~/videos/construction-site.mp4")" type="video/mp4" />
+        <source src="https://videos.pexels.com/video-files/5594430/5594430-hd_1920_1080_25fps.mp4" type="video/mp4" />
+    </video>
+    <div class="cs-scene-overlay"></div><div class="cs-blueprint-grid" aria-hidden="true"></div>
+    <div class="cs-video-chip" aria-label="Live site activity visual"><span class="cs-video-chip-dot"></span><span>LIVE SITE VIEW</span><i>PROJECT FEED</i></div>
+    <header class="cs-topbar">
+        <a class="cs-logo" asp-controller="Home" asp-action="Index" aria-label="ConstructionSaaS home"><span class="cs-logo-mark"><i class="fa-solid fa-compass-drafting"></i></span><span><b>Construction</b><em>SaaS</em><small>PROJECT OPERATIONS</small></span></a>
+        <span class="cs-system-status"><i></i> All systems operational</span>
+    </header>
+    <main class="cs-auth-content">
+        <section class="cs-slider" aria-roledescription="carousel" aria-label="ConstructionSaaS platform highlights">
+            <article class="cs-slide is-active" aria-hidden="false">
+                <p class="cs-eyebrow"><span></span> THE OPERATING SYSTEM FOR BUILDERS</p>
+                <h1>Bring every build<br />into <strong>focus.</strong></h1>
+                <p class="cs-slide-copy">A single, intelligent workspace for teams that plan, manage and deliver exceptional construction projects.</p>
+                <div class="cs-stat-row"><div><b>01</b><span>Connected<br />workspace</span></div><div><b>24/7</b><span>Site-level<br />visibility</span></div></div>
+            </article>
+            <article class="cs-slide" aria-hidden="true">
+                <p class="cs-eyebrow"><span></span> SITE INTELLIGENCE, IN REAL TIME</p>
+                <h1>Decisions that<br />keep work <strong>moving.</strong></h1>
+                <p class="cs-slide-copy">Turn field updates into clear next steps—before a small issue becomes a project delay.</p>
+                <div class="cs-stat-row"><div><b>LIVE</b><span>Project<br />signals</span></div><div><b>ONE</b><span>Trusted source<br />of truth</span></div></div>
+            </article>
+            <article class="cs-slide" aria-hidden="true">
+                <p class="cs-eyebrow"><span></span> BUILT FOR THE FIELD AND OFFICE</p>
+                <h1>Plan with<br /><strong>confidence.</strong></h1>
+                <p class="cs-slide-copy">Keep people, progress and project decisions connected from kick-off through handover.</p>
+                <div class="cs-stat-row"><div><b>100%</b><span>Aligned<br />teams</span></div><div><b>FAST</b><span>Clearer daily<br />decisions</span></div></div>
+            </article>
+            <nav class="cs-slider-nav" aria-label="Slider controls">
+                <button class="is-active" type="button" aria-label="Show slide 1" aria-current="true"></button><button type="button" aria-label="Show slide 2" aria-current="false"></button><button type="button" aria-label="Show slide 3" aria-current="false"></button><span id="csSlideCount">01 <i>/</i> 03</span>
+            </nav>
+        </section>
+        <section class="cs-login-wrap" aria-labelledby="login-title">
+            <div class="cs-login-card">
+                <div class="cs-card-heading"><div><p>WELCOME BACK</p><h2 id="login-title">Sign in to<br /><span>your workspace.</span></h2></div><span class="cs-card-icon"><i class="fa-solid fa-hard-hat"></i></span></div>
+                <span class="cs-access-pill"><i class="fa-solid fa-circle-check"></i> Secure team access</span>
+                <p class="cs-card-intro">Enter your work credentials to continue.</p>
+                <form asp-controller="Account" asp-action="Login" method="post" id="csLoginForm">
+                    @Html.AntiForgeryToken()
+                    @if (TempData["LoginMessage"] != null) { <div class="cs-alert-success" role="status"><i class="fa-solid fa-circle-check"></i> @TempData["LoginMessage"]</div> }
+                    <div asp-validation-summary="ModelOnly" class="cs-validation-summary" role="alert"></div>
+                    <div class="cs-form-group"><label asp-for="Email">Work email</label><div class="cs-input-wrap"><i class="fa-regular fa-envelope"></i><input asp-for="Email" type="email" placeholder="you@company.com" autocomplete="username" /></div><span asp-validation-for="Email" class="cs-field-error"></span></div>
+                    <div class="cs-form-group"><label asp-for="Password">Password</label><div class="cs-input-wrap"><i class="fa-solid fa-lock"></i><input asp-for="Password" type="password" placeholder="Enter your password" autocomplete="current-password" /><button type="button" class="cs-password-toggle" id="csPasswordToggle" aria-label="Show password" aria-pressed="false"><i class="fa-regular fa-eye"></i></button></div><span asp-validation-for="Password" class="cs-field-error"></span></div>
+                    <button type="submit" class="cs-login-button" id="csLoginButton"><span id="csButtonText">Access workspace</span><i class="fa-solid fa-arrow-right"></i></button>
+                <p><a asp-controller="PasswordRecovery" asp-action="Forgot">Forgot password?</a></p></form>
+                <p class="cs-security-note"><i class="fa-solid fa-shield-halved"></i> Protected access for construction teams</p>
+                <p class="cs-register-note">New to ConstructionSaaS? <a asp-controller="Account" asp-action="Register">Create your workspace</a></p>
+            </div>
+        </section>
+    </main>
+    <footer class="cs-footer"><span>© @DateTime.UtcNow.Year ConstructionSaaS</span><span>PLAN · BUILD · DELIVER</span></footer>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script><partial name="_ValidationScriptsPartial" />
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const password = document.getElementById("Password"), toggle = document.getElementById("csPasswordToggle"), form = document.getElementById("csLoginForm"), button = document.getElementById("csLoginButton"), text = document.getElementById("csButtonText"), slides = [...document.querySelectorAll(".cs-slide")], controls = [...document.querySelectorAll(".cs-slider-nav button")], count = document.getElementById("csSlideCount"); let active = 0;
+    if (password && toggle) toggle.addEventListener("click", () => { const show = password.type === "password"; password.type = show ? "text" : "password"; toggle.innerHTML = show ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>'; toggle.setAttribute("aria-label", show ? "Hide password" : "Show password"); toggle.setAttribute("aria-pressed", String(show)); });
+    if (form && button && text) form.addEventListener("submit", () => { if (window.jQuery && window.jQuery.validator && !window.jQuery(form).valid()) return; button.disabled = true; button.classList.add("is-loading"); text.textContent = "Signing in..."; });
+    function select(index) { active = index; slides.forEach((slide, i) => { slide.classList.toggle("is-active", i === index); slide.setAttribute("aria-hidden", String(i !== index)); }); controls.forEach((control, i) => { control.classList.toggle("is-active", i === index); control.setAttribute("aria-current", String(i === index)); }); count.innerHTML = String(index + 1).padStart(2, "0") + " <i>/</i> 03"; }
+    controls.forEach((control, index) => control.addEventListener("click", () => select(index)));
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => select((active + 1) % slides.length), 5600);
+});
+</script>
+<script src="~/js/workspace-ui.js" asp-append-version="true" defer></script>
+</body></html>

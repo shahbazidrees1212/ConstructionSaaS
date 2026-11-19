@@ -1,4 +1,6 @@
-﻿using ConstructionSaaS.Application.DTOs.Projects;
+﻿
+using System.Security.Claims;
+using ConstructionSaaS.Application.DTOs.Projects;
 using ConstructionSaaS.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +22,28 @@ public class ProjectsController : ControllerBase
     private bool TryGetCompanyId(out int companyId)
     {
         var claimValue = User.FindFirst("company_id")?.Value;
-        return int.TryParse(claimValue, out companyId);
+
+        return int.TryParse(claimValue, out companyId)
+               && companyId > 0;
     }
 
+    private string? GetCurrentUserId()
+    {
+        return User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+               ?? User.FindFirst("sub")?.Value;
+    }
+
+    // CREATE PROJECT - CompanyAdmin only
     [HttpPost]
-    [Authorize(Roles = "CompanyAdmin,ProjectManager")]
-    public async Task<IActionResult> Create([FromBody] CreateProjectDto dto)
+    [Authorize(Roles = "CompanyAdmin")]
+    public async Task<IActionResult> Create(
+        [FromBody] CreateProjectDto dto)
     {
         if (!TryGetCompanyId(out var companyId))
             return Forbid();
 
-        var projectId = await _projectService.CreateAsync(dto, companyId);
+        var projectId = await _projectService
+            .CreateAsync(dto, companyId);
 
         return StatusCode(201, new
         {
@@ -39,25 +52,61 @@ public class ProjectsController : ControllerBase
         });
     }
 
+    // GET PROJECTS - Role-based filtering
     [HttpGet]
-    [Authorize(Roles = "CompanyAdmin,ProjectManager,SiteEngineer")]
+    [Authorize(Roles =
+        "CompanyAdmin,ProjectManager,SiteEngineer")]
     public async Task<IActionResult> GetAll()
     {
         if (!TryGetCompanyId(out var companyId))
             return Forbid();
 
-        var projects = await _projectService.GetAllAsync(companyId);
-        return Ok(projects);
+        if (User.IsInRole("CompanyAdmin"))
+        {
+            var allProjects = await _projectService
+                .GetAllAsync(companyId);
+
+            return Ok(allProjects);
+        }
+
+        var userId = GetCurrentUserId();
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Forbid();
+
+        var assignedProjects = await _projectService
+            .GetAssignedProjectsAsync(companyId, userId);
+
+        return Ok(assignedProjects);
     }
 
+    // GET PROJECT BY ID - Role-based filtering
     [HttpGet("{id:int}")]
-    [Authorize(Roles = "CompanyAdmin,ProjectManager,SiteEngineer")]
+    [Authorize(Roles =
+        "CompanyAdmin,ProjectManager,SiteEngineer")]
     public async Task<IActionResult> GetById(int id)
     {
         if (!TryGetCompanyId(out var companyId))
             return Forbid();
 
-        var project = await _projectService.GetByIdAsync(id, companyId);
+        ProjectDto? project;
+
+        if (User.IsInRole("CompanyAdmin"))
+        {
+            project = await _projectService
+                .GetByIdAsync(id, companyId);
+        }
+        else
+        {
+            var userId = GetCurrentUserId();
+
+            if (string.IsNullOrWhiteSpace(userId))
+                return Forbid();
+
+            project = await _projectService
+                .GetAssignedProjectByIdAsync(
+                    id, companyId, userId);
+        }
 
         if (project == null)
             return NotFound();
@@ -65,8 +114,9 @@ public class ProjectsController : ControllerBase
         return Ok(project);
     }
 
+    // UPDATE PROJECT - CompanyAdmin only
     [HttpPut("{id:int}")]
-    [Authorize(Roles = "CompanyAdmin,ProjectManager")]
+    [Authorize(Roles = "CompanyAdmin")]
     public async Task<IActionResult> Update(
         int id,
         [FromBody] UpdateProjectDto dto)
@@ -74,14 +124,21 @@ public class ProjectsController : ControllerBase
         if (!TryGetCompanyId(out var companyId))
             return Forbid();
 
-        var updated = await _projectService.UpdateAsync(id, dto, companyId);
+        var updated = await _projectService
+            .UpdateAsync(id, dto, companyId);
 
         if (!updated)
-            return NotFound(new { message = "Project nahi mila." });
+        {
+            return NotFound(new
+            {
+                message = "Project not found."
+            });
+        }
 
         return NoContent();
     }
 
+    // DELETE PROJECT - CompanyAdmin only
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "CompanyAdmin")]
     public async Task<IActionResult> Delete(int id)
@@ -89,7 +146,10 @@ public class ProjectsController : ControllerBase
         if (!TryGetCompanyId(out var companyId))
             return Forbid();
 
-        var deleted = await _projectService.DeleteAsync(id, companyId);
+        bool deleted;
+        try { deleted = await _projectService.DeleteAsync(id, companyId); }
+        catch (ConstructionSaaS.Application.Interfaces.ProjectHasInvoicesException e)
+        { return Conflict(new { message = e.Message }); }
 
         if (!deleted)
             return NotFound();

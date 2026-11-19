@@ -1,0 +1,22 @@
+@model ConstructionSaaS.Web.Models.AdminWorkspaceViewModel
+@{
+    var manager = ViewData["IsManager"] is true;
+    Layout = manager ? "_ManagerModuleLayout" : "_AdminWorkspaceLayout";
+    ViewData["Title"] = "Recent activity"; ViewData["Active"] = "Activity";
+    var categories = new[] { "Projects", "Team", "Company", "Assignments", "Milestones", "Documents" }.Concat(manager ? Array.Empty<string>() : new[] { "Payments" });
+}
+<section class="module-hero"><div><p class="eyebrow">WORKSPACE HISTORY</p><h1>Workspace activity</h1><p>@(manager ? "Changes recorded under your current account email." : "A clear record of every change.")</p></div></section>
+<section class="panel activity-filters">
+<form method="get" class="project-picker"><label for="category">Category</label><select id="category" name="category"><option value="">All categories</option>@foreach(var c in categories){<option selected="@(Model.Category == c)" value="@c">@c</option>}</select><button class="primary-button" type="submit">Apply filter</button><a class="module-secondary" asp-action="Activity">Reset</a></form>
+</section>
+<nav class="activity-chips" aria-label="Activity categories"><a asp-action="Activity" class="@(string.IsNullOrEmpty(Model.Category) ? "selected" : "")">All</a>@foreach(var c in categories){<a asp-action="Activity" asp-route-category="@c" class="@(Model.Category == c ? "selected" : "")">@c</a>}</nav>
+<div class="activity-columns"><section class="panel activity-history">
+@if(Model.Activity.Items.Count == 0){<div class="module-empty"><h2>No recorded activity</h2><p>Changes made after activity tracking was enabled will appear here. Try another category.</p></div>}
+@foreach(var day in Model.Activity.Items.GroupBy(a => a.OccurredAtUtc.Date)){
+<h2 class="activity-day">@day.Key.ToString("dd MMMM yyyy")</h2><ol class="module-timeline">
+@foreach(var a in day){<li><span class="timeline-dot" aria-hidden="true"></span><div><span class="module-pill">@a.Category</span><h3>@a.Description</h3><p>By @a.Actor <span aria-hidden="true">&middot;</span> <time datetime="@a.OccurredAtUtc.ToString("O")">@a.OccurredAtUtc.ToString("HH:mm") UTC</time></p></div></li>}
+</ol>}
+<div class="module-actions activity-pagination">@if(Model.Activity.Page > 1){<a class="module-secondary" asp-action="Activity" asp-route-page="@(Model.Activity.Page - 1)" asp-route-category="@Model.Category">&larr; Previous</a>}<span aria-current="page">Page @Model.Activity.Page</span>@if(Model.Activity.HasMore){<a class="module-secondary" asp-action="Activity" asp-route-page="@(Model.Activity.Page + 1)" asp-route-category="@Model.Category">Next &rarr;</a>}</div>
+</section><aside class="panel activity-guide"><h2>Activity categories</h2>
+@if(!manager){<article><i class="fa-regular fa-credit-card" aria-hidden="true"></i><div><h3>Payments</h3><p>Subscription, checkout and invoice events.</p></div></article>}
+<article><i class="fa-regular fa-building" aria-hidden="true"></i><div><h3>Projects</h3><p>Project creation, updates and delivery changes.</p></div></article><article><i class="fa-solid fa-users" aria-hidden="true"></i><div><h3>Team</h3><p>Team member and access updates.</p></div></article><article><i class="fa-regular fa-folder-open" aria-hidden="true"></i><div><h3>Documents</h3><p>File uploads and removals.</p></div></article><div class="activity-about"><h2>About this history</h2><p>Track who changed what and when. Times are shown in UTC.</p></div></aside></div>

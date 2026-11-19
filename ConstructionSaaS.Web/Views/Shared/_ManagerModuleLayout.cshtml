@@ -1,0 +1,10 @@
+@{ Layout = "_ManagerLayout"; }
+@section Styles {
+    @await RenderSectionAsync("Styles", required: false)
+    <link rel="stylesheet" href="~/css/admin-workspace.css" asp-append-version="true" />
+}
+<div class="module-content manager-modules">
+    <partial name="_WorkspaceNotices" />
+    @RenderBody()
+</div>
+@section Scripts { @await RenderSectionAsync("Scripts", required: false) }

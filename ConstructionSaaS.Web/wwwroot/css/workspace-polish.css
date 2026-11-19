@@ -1,0 +1,97 @@
+@font-face{font-family:"Manrope";font-style:normal;font-weight:200 800;font-display:swap;src:url("../fonts/manrope.woff2") format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:100 1000;font-display:swap;src:url("../fonts/dm-sans.woff2") format("woff2")}
+/* Shared visual language, loaded after page-specific styles. */
+:root{--ui-ink:#183348;--ui-muted:#60758a;--ui-line:#dfe7ee;--ui-canvas:#f4f7fa;--ui-accent:#f4bb54;--ui-shadow:0 4px 20px rgba(22,48,68,.045);color-scheme:light}
+body{font-family:"DM Sans","Segoe UI",Arial,sans-serif;color:var(--ui-ink);background:var(--ui-canvas);-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font-family:inherit}button,a,input,select,textarea{touch-action:manipulation}
+textarea{line-height:1.65}h1,h2,h3{font-family:Manrope,"Segoe UI",Arial,sans-serif;text-wrap:balance}h1{letter-spacing:-.035em}p{line-height:1.7}
+*,*::before,*::after{box-sizing:border-box}img,svg{max-width:100%}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #367ca6;outline-offset:3px}
+input:not([type=checkbox]):not([type=radio]):not([type=hidden]),select{min-height:44px}input,select,textarea{max-width:100%}
+button:disabled{opacity:.55;cursor:not-allowed}button:not(:disabled),summary{cursor:pointer}
+.dashboard,.workspace-shell{min-height:100dvh}.main,.manager-main,.workspace-content{min-width:0}
+.sidebar,.manager-sidebar,.workspace-sidebar{background:#152e40;border-right:1px solid #ffffff0d;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#496172 transparent}
+.sidebar .nav-link,.manager-sidebar nav a,.workspace-sidebar nav a{min-height:44px;border-radius:10px;transition:background .16s,color .16s;line-height:1.45}
+.sidebar .nav-link.active,.manager-sidebar nav a.selected,.workspace-sidebar nav a.active{background:var(--ui-accent);color:#173347;font-weight:700;box-shadow:0 3px 10px #0000000a}
+.nav-label,.nav-caption{font-size:10px;letter-spacing:.16em}.manager-sidebar .nav-caption{margin-top:32px;margin-bottom:14px}
+.manager-sidebar nav a{margin-bottom:4px;padding:11px 14px;font-size:13px}.manager-account{padding-top:24px}.sidebar-promo{margin-top:24px}
+.topbar,.manager-topbar,.workspace-topbar{min-height:76px;background:#fff;border-bottom:1px solid var(--ui-line);gap:16px}
+.breadcrumb,.manager-topbar>span{min-width:0;overflow-wrap:anywhere}.profile-link{white-space:nowrap}.profile-link .account-icon{background:#eaf0f5;color:#254d66;border-radius:50%;min-width:34px;min-height:34px;display:grid;place-items:center}
+.content,.manager-modules,.mp-page,.details-page{padding:clamp(18px,2.4vw,36px)}
+.panel,.mp-panel,.mp-stat,.details-card,.form-card,.module-metrics article,.project-card{border:1px solid var(--ui-line);box-shadow:var(--ui-shadow);border-radius:16px}
+.module-hero,.mp-header,.details-header{background:linear-gradient(115deg,#17374c,#244d63);border:1px solid #ffffff0c;border-radius:20px;padding:clamp(24px,3vw,40px)}
+.module-hero h1,.mp-header h1,.details-header h1{font-size:clamp(27px,3vw,39px);line-height:1.18}.module-hero p:not(.eyebrow){max-width:66ch;color:#d0dce5}
+.module-content h2{font-family:Manrope,"Segoe UI",Arial,sans-serif;line-height:1.4}.module-muted{color:var(--ui-muted);font-size:13px}
+.module-metrics article{padding:24px;border-top:3px solid #eac579}.module-metrics strong{font-family:Manrope,"Segoe UI",Arial,sans-serif;font-size:30px;letter-spacing:-1px;color:var(--ui-ink)}
+.module-form input,.module-form select,.module-form textarea,.project-picker select,.project-picker input{background:#fff;border-color:#ccd9e4;border-radius:10px;font-size:14px;transition:border-color .15s,box-shadow .15s}
+.module-form label,.project-picker label{font-size:13px}.module-form input:hover,.module-form select:hover,.module-form textarea:hover{border-color:#9db2c3}
+.module-form .form-grid{align-items:start}.project-picker{padding:18px;background:#fff;border:1px solid var(--ui-line);border-radius:14px;gap:12px}.project-picker input{flex:1;min-width:160px}.project-picker select{min-width:180px}
+.primary-button,.save-button,.mp-btn,.module-secondary,.module-danger{min-height:42px;border-radius:10px;font-weight:700;transition:background .15s,box-shadow .15s}
+.primary-button:hover,.save-button:hover{box-shadow:0 4px 12px #bf8a2c20}.module-secondary:hover{background:#e9f0f5}.module-danger:hover{background:#ffe2e6}
+.module-table-wrap,.table-scroll,.table-responsive{overflow-x:auto;overscroll-behavior-inline:contain;border-radius:12px}
+table{border-collapse:collapse}th{font-size:11px;letter-spacing:.045em;text-align:left}td{line-height:1.6}td,th{vertical-align:middle}tbody tr:hover{background:#f8fafc}
+.module-pill{line-height:1.5;padding:5px 10px;font-size:11px;border-radius:20px}.module-pill.danger{background:#ffedf0;color:#9f3048}
+.task-card{padding:26px 0}.task-card>.module-heading h2{font-size:20px}.task-card .task-description{font-size:14px;max-width:90ch}.task-card details{margin-top:14px}.task-summary{font-size:13px}
+.task-workflow-steps li{border-top:3px solid #d2a24b}.task-workflow-steps span{font-size:13px}.manager-status-correction{padding:4px 18px}.module-form textarea{min-height:92px}
+input[type=file]{padding:10px;background:#f8fafc;border:1px dashed #b5c8d7;border-radius:10px}input[type=file]::file-selector-button{padding:8px 12px;margin-right:12px;border:0;border-radius:7px;background:#e5edf4;color:#23465e;font:600 13px "Segoe UI",sans-serif;cursor:pointer}
+.module-notice,.alert-danger,.alert-success{border-radius:12px;line-height:1.7;overflow-wrap:anywhere}.validation-summary-valid{display:none}.field-validation-error,.validation-summary-errors{color:#ab3045;font-size:13px}
+.edit-workspace{max-width:1250px;padding:0;margin:0 auto}.content>.form-container{max-width:1100px;padding:0;margin:0 auto}.content>.form-container .form-card{padding:clamp(20px,3vw,36px)}
+.footer,.manager-footer,.workspace-footer{position:static;font-size:12px;color:#6b8092;gap:16px;flex-wrap:wrap}.recovery-page{width:min(100%,640px)}
+.workspace-menu-button{display:none}
+.workspace-nav-icon{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+@media(max-width:1100px){.module-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.module-form .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.module-hero{gap:20px}.module-hero .primary-button{flex-shrink:0}}
+@media(max-width:760px){
+ .dashboard,.workspace-shell{display:block}.sidebar,.manager-sidebar,.workspace-sidebar{position:static!important;width:100%!important;height:auto!important;padding:16px 18px!important;overflow:visible;display:block!important}
+ .sidebar .brand,.manager-brand,.workspace-brand{padding:0;max-width:100%;margin:0 0 10px;font-size:15px}.sidebar .brand>span:not(.brand-mark){display:inline!important}
+ .main,.manager-main,.workspace-content{margin-left:0!important;width:100%;padding-left:0!important}
+ .topbar,.manager-topbar,.workspace-topbar{padding:16px 18px;min-height:64px;flex-wrap:wrap}.content,.manager-modules,.mp-page,.details-page{padding:18px}
+ .sidebar .nav-list,.manager-sidebar nav,.workspace-sidebar nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:12px 0}
+ .sidebar .nav-link,.manager-sidebar nav a,.workspace-sidebar nav a{padding:11px 12px;justify-content:flex-start;font-size:12px;margin:0;min-width:0}.sidebar .nav-link span{display:inline!important}.sidebar .nav-link i{width:18px;font-size:15px}
+ .sidebar .nav-label,.nav-caption,.workspace-label,.sidebar-bottom,.workspace-sidebar-footer,.manager-account{display:none!important}.manager-sidebar form{position:static;margin:10px 0 0}.manager-sidebar .signout{width:100%;margin:0}
+ .workspace-menu-button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;border:1px solid #496272;border-radius:9px;background:#203f54;color:#fff;font:600 13px "Segoe UI",sans-serif}
+ .sidebar.ui-nav-collapsed nav,.manager-sidebar.ui-nav-collapsed nav,.workspace-sidebar.ui-nav-collapsed nav{display:none!important}.ui-nav-collapsed>form{display:none!important}
+ .module-hero{align-items:flex-start;flex-direction:column;padding:24px}.module-hero h1{font-size:29px}.module-metrics{gap:12px}.module-metrics article{padding:18px}.module-metrics strong{font-size:27px}
+ .module-form .form-grid{grid-template-columns:1fr}.project-picker{align-items:stretch}.project-picker label{flex:1 0 100%}.project-picker select,.project-picker input{width:100%;max-width:none;flex:1 1 100%;min-width:0}
+ .module-heading{align-items:flex-start}.module-content .panel{padding:20px}.module-table-wrap table,.table-scroll table{min-width:620px}.edit-heading{padding:22px;align-items:flex-start;flex-direction:column}.form-actions,.edit-actions{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.public-topbar{display:flex;justify-content:space-between;align-items:center;padding:22px max(24px,5vw);background:white;border-bottom:1px solid var(--ui-line);margin-bottom:32px}.public-brand{font-weight:750;text-decoration:none;color:var(--ui-ink)}.public-brand strong{color:#a56c11}.create-topbar{padding:24px 32px;background:white;border-bottom:1px solid var(--ui-line)}
+
+@media(max-width:760px){.admin-dashboard .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.admin-dashboard .stat-card{padding:16px;min-height:145px;display:block}.admin-dashboard .stat-icon{width:30px;height:30px;float:right;margin-left:6px}.admin-dashboard .stat-card h3{font-size:26px}.admin-dashboard .stat-card p{font-size:12px}.admin-dashboard .operational-strip{grid-template-columns:1fr}.admin-dashboard .sidebar .brand{justify-content:flex-start;padding-left:0}}
+
+.manager-insights{grid-template-columns:repeat(4,minmax(0,1fr))}@media(max-width:1100px){.manager-insights{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.manager-insights{grid-template-columns:1fr}}
+/* Project billing and the private client payment page. */
+.module-form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.invoice-line { padding:18px; border:1px solid #dfe6ed; border-radius:12px; margin-bottom:14px; align-items:end; }
+.billing-actions { display:flex; gap:12px; flex-wrap:wrap; margin:22px 0; }
+.billing-actions form { margin:0; }
+.secondary-button { display:inline-flex; align-items:center; justify-content:center; padding:12px 16px; border:1px solid #ccd8e3; border-radius:9px; background:#f5f8fb; color:#19374b; font:600 13px 'DM Sans',sans-serif; text-decoration:none; cursor:pointer; }
+.secondary-button:focus-visible,.payment-page button:focus-visible { outline:3px solid #3976ad; outline-offset:3px; }
+.payment-link { width:100%; box-sizing:border-box; padding:13px; border:1px solid #ccd8e3; border-radius:9px; margin-top:10px; }
+.payment-reference { overflow-wrap:anywhere; }
+.payment-page { margin:0; background:#f3f6fa; color:#19374b; font:15px 'DM Sans',sans-serif; }
+.payment-page * { box-sizing:border-box; }
+.payment-container { max-width:900px; margin:0 auto; padding:32px 20px; }
+.payment-brand { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding:12px 0 28px; }
+.payment-brand strong { font-size:20px; overflow-wrap:anywhere; }
+.payment-page .panel { padding:28px; border:1px solid #dfe6ed; border-radius:18px; background:#fff; }
+.payment-page table { width:100%; min-width:460px; border-collapse:collapse; text-align:left; }
+.payment-page th,.payment-page td { padding:15px 12px; border-bottom:1px solid #e6ecf2; }
+.payment-page th { background:#f5f8fb; font-size:12px; }
+.payment-page .primary-button { display:inline-flex; padding:14px 20px; border:0; border-radius:10px; background:#f7bf57; color:#142c3c; font:700 14px 'DM Sans',sans-serif; cursor:pointer; }
+.payment-page p { line-height:1.7; }
+.payment-test { border-left:4px solid #e7a330; padding:15px; background:#fff6e4; }
+.payment-page footer { color:#65768a; text-align:center; margin-top:24px; font-size:12px; }
+@media screen and (max-width:650px) {
+  .invoice-items { display:block; min-width:0!important; }
+  .invoice-items thead { display:none; }
+  .invoice-items tbody,.invoice-items tfoot { display:block; }
+  .invoice-items tbody tr { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-bottom:1px solid #dfe6ed; }
+  .invoice-items tbody td { display:flex; flex-direction:column; gap:7px; overflow-wrap:anywhere; }
+  .invoice-items tbody td:first-child { grid-column:1/-1; }
+  .invoice-items tbody td::before { content:attr(data-label); color:#65768a; font-size:11px; font-weight:700; }
+  .invoice-items tfoot tr { display:flex; justify-content:space-between; align-items:center; }
+}
+@media print { .payment-page .billing-actions,.payment-page [data-print-invoice] { display:none; } .payment-page { background:#fff; } .payment-container { padding:0; max-width:none; } .payment-page .module-hero { background:#fff; color:#19374b; border:1px solid #dfe6ed; } .payment-page .module-hero p { color:#19374b; } .payment-page .module-table-wrap { overflow:visible; } }
+@media(max-width:650px) { .module-form-grid { grid-template-columns:1fr; } .payment-container { padding:20px 14px; } .payment-page .panel { padding:20px 16px; } .billing-actions { flex-direction:column; align-items:stretch; } .billing-actions button { width:100%; } }
